@@ -1,0 +1,4 @@
+interface:
+  display_name: "Statistical Result Analysis"
+  short_description: "Reproducible statistical analysis for research results"
+  default_prompt: "Use $statistical-result-analysis to analyze these experiment results for my hypothesis."

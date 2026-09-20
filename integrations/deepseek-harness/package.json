@@ -1,0 +1,29 @@
+{
+  "name": "@research-agent-platform/harness-plugin",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "dsh": { "bundle": { "patch": "./cordis.patch.yml" } },
+  "exports": {
+    ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" }
+  },
+  "files": ["dist", "cordis.patch.yml", "README.md"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc --noEmit -p tsconfig.check.json"
+  },
+  "dependencies": {
+    "@research-agent-platform/research-core": "link:../../packages/research-core",
+    "@research-agent-platform/research-skills": "link:../../packages/research-skills"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "4.0.1",
+    "@deepseek-ai/dsh-skill": "0.1.0-rc.5",
+    "@deepseek-ai/dsh-tools": "0.1.0-rc.5"
+  },
+  "devDependencies": {
+    "@deepseek-ai/cordis": "4.0.1",
+    "@deepseek-ai/dsh-skill": "0.1.0-rc.5",
+    "@deepseek-ai/dsh-tools": "0.1.0-rc.5"
+  }
+}

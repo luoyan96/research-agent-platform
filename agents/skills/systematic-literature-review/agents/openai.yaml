@@ -1,0 +1,4 @@
+interface:
+  display_name: "Systematic Literature Review"
+  short_description: "Reproducible screening and thematic evidence synthesis"
+  default_prompt: "Use $systematic-literature-review to plan and conduct a scoped review of this topic."

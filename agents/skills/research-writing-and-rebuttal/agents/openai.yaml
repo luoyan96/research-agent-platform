@@ -1,0 +1,4 @@
+interface:
+  display_name: "Research Writing and Rebuttal"
+  short_description: "Evidence-backed academic writing and reviewer replies"
+  default_prompt: "Use $research-writing-and-rebuttal to revise this paper section with my saved evidence."

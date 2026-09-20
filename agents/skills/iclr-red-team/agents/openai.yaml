@@ -1,0 +1,4 @@
+interface:
+  display_name: "ICLR Red Team"
+  short_description: "Pre-submission ICLR-style rigor and compliance review"
+  default_prompt: "Use $iclr-red-team to identify reject-worthy gaps in my ICLR draft."

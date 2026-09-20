@@ -1,0 +1,5 @@
+- insert:
+    - id: research-core
+      name: '@research-agent-platform/harness-plugin'
+      config:
+        workspaceRoot: !!js process.env.DSH_RESEARCH_WORKSPACE ?? process.cwd()

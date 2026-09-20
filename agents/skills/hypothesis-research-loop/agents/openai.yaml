@@ -1,0 +1,4 @@
+interface:
+  display_name: "Hypothesis Research Loop"
+  short_description: "Hypothesis, experiment, reflection, and next-step loop"
+  default_prompt: "Use $hypothesis-research-loop to turn this research direction into testable experiments."

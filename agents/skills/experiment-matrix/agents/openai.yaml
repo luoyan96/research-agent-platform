@@ -1,0 +1,4 @@
+interface:
+  display_name: "Experiment Matrix"
+  short_description: "Claim-driven ML experiment plan with approval gates"
+  default_prompt: "Use $experiment-matrix to design decisive experiments for my research claims."

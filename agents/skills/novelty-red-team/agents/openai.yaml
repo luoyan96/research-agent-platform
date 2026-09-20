@@ -1,0 +1,4 @@
+interface:
+  display_name: "Novelty Red Team"
+  short_description: "Stress-test novelty claims against closest prior work"
+  default_prompt: "Use $novelty-red-team to attack the novelty claim in my research thesis."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Research Thesis"
+  short_description: "Falsifiable research thesis and go-no-go decision"
+  default_prompt: "Use $research-thesis to turn my idea into a defensible ML research thesis."

@@ -1,0 +1,21 @@
+{
+  "name": "research-agent-platform",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@11.21.0",
+  "engines": { "node": ">=22.19.0" },
+  "scripts": {
+    "build": "pnpm -r build",
+    "typecheck": "pnpm -r typecheck",
+    "test": "vitest run",
+    "check:content": "node scripts/check-content.mjs",
+    "ci": "pnpm check:content && pnpm build && pnpm typecheck && pnpm test",
+    "demo": "node scripts/demo.mjs"
+  },
+  "devDependencies": {
+    "@types/node": "22.20.0",
+    "typescript": "6.0.3",
+    "vitest": "4.1.8"
+  }
+}

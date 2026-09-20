@@ -1,0 +1,4 @@
+interface:
+  display_name: "Academic Paper Review"
+  short_description: "Evidence-led critique and venue-ready paper review"
+  default_prompt: "Use $academic-paper-review to critically review this manuscript for its target venue."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Paper Search Pro"
+  short_description: "Multi-source academic discovery and briefing reports"
+  default_prompt: "Use $paper-search-pro to build a ranked reading list for my research question."
