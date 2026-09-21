@@ -18,6 +18,28 @@ importers:
         specifier: 4.1.8
         version: 4.1.8(@types/node@22.20.0)(vite@8.3.0(@types/node@22.20.0)(yaml@2.8.1))
 
+  apps/web:
+    dependencies:
+      '@phosphor-icons/web':
+        specifier: 2.1.2
+        version: 2.1.2
+      '@research-agent-platform/contracts':
+        specifier: workspace:*
+        version: link:../../packages/contracts
+    devDependencies:
+      typescript:
+        specifier: 6.0.3
+        version: 6.0.3
+      vite:
+        specifier: 8.3.0
+        version: 8.3.0(@types/node@22.20.0)(yaml@2.8.1)
+
+  packages/contracts:
+    dependencies:
+      zod:
+        specifier: 4.1.12
+        version: 4.1.12
+
   packages/research-core: {}
 
   packages/research-skills:
@@ -33,6 +55,9 @@ packages:
 
   '@oxc-project/types@0.150.0':
     resolution: {integrity: sha512-rDS5/31E9HfPl/CIzGrn0DOlvBbXFseQ5URJ9sYMfstbKLD/c6Gm9vmRzRGDdAXyOIL4zmO37lc9RIwYqVruZw==}
+
+  '@phosphor-icons/web@2.1.2':
+    resolution: {integrity: sha512-rPAR9o/bEcp4Cw4DEeZHXf+nlGCMNGkNDRizYHM47NLxz9vvEHp/Tt6FMK1NcWadzw/pFDPnRBGi/ofRya958A==}
 
   '@rolldown/binding-android-arm-eabi@1.2.9':
     resolution: {integrity: sha512-tNISae1QEf/vkb3xkRcjV5SEdzPE97We5IVaa2Z8jSszQPZ8U60B/YCYpw4QI7VidYsBtKavczXf+DyDs9WGxw==}
@@ -451,11 +476,16 @@ packages:
     engines: {node: '>= 14.6'}
     hasBin: true
 
+  zod@4.1.12:
+    resolution: {integrity: sha512-JInaHOamG8pt5+Ey8kGmdcAcg3OL9reK8ltczgHTAwNhMys/6ThXHityHxVV2p3fkw/c+MAvBHFVYHFZDmjMCQ==}
+
 snapshots:
 
   '@jridgewell/sourcemap-codec@1.6.0': {}
 
   '@oxc-project/types@0.150.0': {}
+
+  '@phosphor-icons/web@2.1.2': {}
 
   '@rolldown/binding-android-arm-eabi@1.2.9':
     optional: true
@@ -741,3 +771,5 @@ snapshots:
       stackback: 0.0.2
 
   yaml@2.8.1: {}
+
+  zod@4.1.12: {}
