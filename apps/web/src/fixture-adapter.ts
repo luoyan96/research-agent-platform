@@ -15,8 +15,9 @@ import type { TaskCardView, PreviewView, ReadAdapter } from "./view-model";
 // Synthetic presentation content validated by the frozen B0 0.1.0 schemas.
 // Never imported by production; this adapter performs no service commands.
 const content: Omit<PreviewView, "tasks"> & {
-  tasks: Omit<TaskCardView, "column" | "state">[];
+  tasks: Omit<TaskCardView, "column" | "state" | "scopeMemberIds">[];
 } = {
+  currentMemberId: "member_A",
   dateLabel: "9月21日 周一 · 示例时点",
   availabilityCaption:
     "成员自报 · 适用 2026年9月21日–27日 · 更新于 9月21日（合成示例）",
@@ -27,7 +28,6 @@ const content: Omit<PreviewView, "tasks"> & {
       category: "知识产权",
       people: "待认领",
       date: "时间待确认",
-      mine: false,
     },
     {
       id: "intern",
@@ -35,7 +35,6 @@ const content: Omit<PreviewView, "tasks"> & {
       category: "学生培养",
       people: "负责人待定",
       date: "时间待定",
-      mine: false,
     },
     {
       id: "proposal",
@@ -46,7 +45,6 @@ const content: Omit<PreviewView, "tasks"> & {
       accepted: 1,
       total: 5,
       note: "等待洛确认研究主线。",
-      mine: true,
       detail: {
         people: "负责人 洛 · 参与 林同学 · 9月25日交付内部初稿（已确认）",
         summary: "已验收 1 / 5 项；前期成果整理可继续，初稿整合等待方向确认。",
@@ -68,7 +66,6 @@ const content: Omit<PreviewView, "tasks"> & {
       date: "9月25日",
       accepted: 2,
       total: 4,
-      mine: false,
     },
     {
       id: "data",
@@ -77,7 +74,6 @@ const content: Omit<PreviewView, "tasks"> & {
       people: "王",
       date: "9月21日",
       note: "数据包已交付，等待验收",
-      mine: true,
     },
     {
       id: "meeting",
@@ -86,7 +82,6 @@ const content: Omit<PreviewView, "tasks"> & {
       people: "林",
       date: "9月18日",
       note: "已验收",
-      mine: true,
     },
   ],
   members: [
@@ -186,6 +181,8 @@ export const contractTasks = content.tasks.map((view, index) =>
     title: view.title,
     taskType: kinds[index],
     status: statuses[index],
+    initiatorId: ["member_B", "member_B", "member_A", "member_C", "member_D", "member_B"][index],
+    reviewerId: ["member_C", "member_B", "member_A", "member_C", "member_A", "member_A"][index],
     leadId: [null, null, "member_A", "member_C", "member_D", "member_B"][index],
     participantIds: index === 2 ? ["member_B"] : [],
     blocker:

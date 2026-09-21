@@ -1,6 +1,6 @@
 import "@phosphor-icons/web/regular";
 import "./style.css";
-import { escapeHtml as e, unavailableAdapter } from "./view-model";
+import { escapeHtml as e, unavailableAdapter, tasksInScope } from "./view-model";
 import type { PreviewView, TaskCardView } from "./view-model";
 
 const app = document.querySelector<HTMLDivElement>("#app")!;
@@ -88,7 +88,7 @@ function card(task: TaskCardView) {
     ${task.id === "patent" ? link("/tasks/patent", "查看要求 " + icon("arrow-up-right"), "card-link") : ""}</article>`;
 }
 function overview(view: PreviewView) {
-  const visible = view.tasks.filter((t) => scope === "lab" || t.mine);
+  const visible = tasksInScope(view, scope);
   return `<section class="page"><div class="page-heading"><div><h1>实验室任务</h1><p class="intro">任务、人员和下一步，放在一起看。</p></div><span class="date">${e(view.dateLabel || "")}</span></div>
     <div class="scope" role="group" aria-label="任务范围"><button data-scope="lab" aria-pressed="${scope === "lab"}">实验室</button><button data-scope="mine" aria-pressed="${scope === "mine"}">我参与的</button><span>当前可见任务${scope === "mine" ? " · 演示成员洛" : ""}</span></div>
     ${
@@ -188,7 +188,7 @@ function renderView() {
   const main = document.querySelector("main")!;
   if (route() === "/") {
     const recent = document.querySelector("#recent")!;
-    const task = data?.tasks.find((t) => t.mine);
+    const task = data ? tasksInScope(data, "mine")[0] : undefined;
     recent.innerHTML = task
       ? `<span>继续上次的事</span>${link("/tasks/" + encodeURIComponent(task.id), e(task.title) + " · " + e(task.state) + " " + icon("arrow-right"))}`
       : "暂无最近任务";

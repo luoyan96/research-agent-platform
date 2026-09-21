@@ -11,7 +11,7 @@ export interface TaskCardView {
   note?: string;
   accepted?: number;
   total?: number;
-  mine: boolean;
+  scopeMemberIds: string[];
   detail?: {
     people: string;
     summary: string;
@@ -39,11 +39,19 @@ export interface MemberView {
   availability: string;
 }
 export interface PreviewView {
+  currentMemberId?: string;
   tasks: TaskCardView[];
   members: MemberView[];
   steps: StepView[];
   dateLabel?: string;
   availabilityCaption?: string;
+}
+// Presentation filtering for already-visible demo data, not authorization.
+// F1 must consume the server-authorized scope=mine response.
+export function tasksInScope(view: PreviewView, scope: string): TaskCardView[] {
+  if (scope === 'lab') return view.tasks;
+  if (!view.currentMemberId) return [];
+  return view.tasks.filter(task => task.scopeMemberIds.includes(view.currentMemberId!));
 }
 export interface ReadAdapter {
   read(signal: AbortSignal): Promise<PreviewView>;
