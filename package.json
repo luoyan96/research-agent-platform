@@ -4,14 +4,21 @@
   "private": true,
   "type": "module",
   "packageManager": "pnpm@11.21.0",
-  "engines": { "node": ">=22.19.0" },
+  "engines": {
+    "node": ">=22.19.0"
+  },
   "scripts": {
     "build": "pnpm -r build",
     "typecheck": "pnpm -r typecheck",
     "test": "vitest run",
     "check:content": "node scripts/check-content.mjs",
-    "ci": "pnpm check:content && pnpm build && pnpm typecheck && pnpm test",
-    "demo": "node scripts/demo.mjs"
+    "ci": "pnpm check:content && pnpm build && pnpm typecheck && node scripts/export-contracts.mjs --check && pnpm test && node scripts/check-b0-process.mjs",
+    "demo": "node scripts/demo.mjs",
+    "contracts:export": "node scripts/export-contracts.mjs",
+    "check:b0": "node scripts/export-contracts.mjs --check && vitest run packages/contracts/tests apps/api/tests && node scripts/check-b0-process.mjs",
+    "api:start": "node apps/api/dist/main.js",
+    "db:migrate": "node apps/api/dist/manage.js migrate",
+    "db:seed": "node apps/api/dist/manage.js seed"
   },
   "devDependencies": {
     "@types/node": "22.20.0",

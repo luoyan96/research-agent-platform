@@ -11,5 +11,5 @@
     "build": "tsc -p tsconfig.json && node ../../scripts/copy-skills.mjs",
     "typecheck": "tsc --noEmit -p tsconfig.check.json"
   },
-  "dependencies": { "yaml": "2.8.1" }
+  "dependencies": { "yaml": "2.8.3" }
 }
