@@ -36,6 +36,8 @@ flowchart LR
 
 十项已有 Skills 是候选资产，不预设全部成为首发智能体。详细范围见[产品规划 v0.3](docs/product-plan.md)，方案确认、任务承接、状态和私有边界见[任务分配设计](docs/task-allocation.md)，实际价值如何验证见[试点计划](docs/validation-plan.md)，推进顺序见[路线图](docs/roadmap.md)。
 
+简洁入口、实验室任务总览和任务详情的视觉方向已初步确认，见[九张界面图](docs/design/README.md)。下一步开发从[第一版交接说明](docs/development-handoff.md)开始，统一接口与状态后分批实现；设计图中的任务与执行状态均为示例。
+
 ## 当前有什么
 
 | 内容 | 状态 | 实际边界 |
