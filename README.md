@@ -38,6 +38,8 @@ flowchart LR
 
 简洁入口、实验室任务总览和任务详情的视觉方向已初步确认，见[九张界面图](docs/design/README.md)。下一步开发从[第一版交接说明](docs/development-handoff.md)开始，统一接口与状态后分批实现；设计图中的任务与执行状态均为示例。
 
+前后端分工直接使用[分阶段开发文档](docs/development/README.md)，其中有各自开发指南、共同接口约定、逐阶段验收案例和[第一步启动 prompt](docs/development/prompts.md)。
+
 ## 当前有什么
 
 | 内容 | 状态 | 实际边界 |
