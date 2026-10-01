@@ -1,12 +1,18 @@
-# DeepSeek Harness 适配源码
+# DeepSeek Harness 集成
+
+2026-09-30 B3：新增 [受限服务端运行组合](runtime/README.md)，使用可安装的官方 0.2.0-rc.1；已进入根构建、类型和测试。最小真实调用、服务规划与文本公共候选已验证；F3/共同 G3 已通过，见 [G3 报告](../../docs/development/reports/G3-overall-2026-09-30.md)；安装与版本选择见 [B3 核查](B3-verification.md)。下面的六工具插件保留为历史独立适配，不挂载到团队 worker。
+
+## 历史六工具适配源码
 
 **状态：待联调，不属于默认 workspace、构建或 CI。** 这里保存原 `dsh-research-plugins` 的六项工具注册方式，已改为使用本仓库科研核心与完整十项 Skills。尚未证明它在某个干净安装的 Harness 版本中可用。
+
+2026-09-21 B0 已重新核查固定版本并实际尝试安装，仍受依赖阻塞；详情和 B3 影响见 [G0-H 核查报告](B0-verification.md)。核查完成不等于 Harness 可用。
 
 ## 为什么暂时独立
 
 2026-09-20 的安装检查发现：原插件声明的 `@deepseek-ai/dsh-tools@0.1.0-rc.5` 在公开 npm registry 无法取得；当时公开的 `0.0.1-rc.1` 依赖链又因缺少 `@deepseek-ai/dsh-type-meta` 返回 404。这是已经观察到的依赖问题，不代表所有 Harness 发行方式都不可用。
 
-因此保留原代码对应的 SDK 版本约束，不用手写类型替身或关闭类型检查来宣称兼容。这里的 `package.json` 记录待解决的依赖，不承诺直接 `pnpm install` 可成功。根目录的锁文件仅覆盖两个可独立验证的基础包。
+因此保留原代码对应的 SDK 版本约束，不用手写类型替身或关闭类型检查来宣称兼容。这里的 `package.json` 记录待解决的依赖，不承诺直接 `pnpm install` 可成功。以上是历史六工具包的边界；根锁文件现在也覆盖 B3 runtime 组合，但不覆盖这个旧插件包。
 
 ## 迁入接口
 

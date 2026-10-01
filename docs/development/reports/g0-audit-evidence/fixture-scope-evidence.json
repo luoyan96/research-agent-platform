@@ -1,0 +1,67 @@
+{
+  "memberId": "member_A",
+  "expected": [
+    "patent",
+    "intern",
+    "proposal",
+    "paper",
+    "data",
+    "meeting"
+  ],
+  "actual": [
+    "proposal",
+    "data",
+    "meeting"
+  ],
+  "omitted": [
+    "patent",
+    "intern",
+    "paper"
+  ],
+  "relationships": [
+    {
+      "id": "patent",
+      "initiatorId": "member_A",
+      "reviewerId": "member_A",
+      "leadId": null,
+      "participantIds": []
+    },
+    {
+      "id": "intern",
+      "initiatorId": "member_A",
+      "reviewerId": "member_A",
+      "leadId": null,
+      "participantIds": []
+    },
+    {
+      "id": "proposal",
+      "initiatorId": "member_A",
+      "reviewerId": "member_A",
+      "leadId": "member_A",
+      "participantIds": [
+        "member_B"
+      ]
+    },
+    {
+      "id": "paper",
+      "initiatorId": "member_A",
+      "reviewerId": "member_A",
+      "leadId": "member_C",
+      "participantIds": []
+    },
+    {
+      "id": "data",
+      "initiatorId": "member_A",
+      "reviewerId": "member_A",
+      "leadId": "member_D",
+      "participantIds": []
+    },
+    {
+      "id": "meeting",
+      "initiatorId": "member_A",
+      "reviewerId": "member_A",
+      "leadId": "member_B",
+      "participantIds": []
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "name": "@research-agent/web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "pnpm --filter @research-agent-platform/contracts build && vite --host 127.0.0.1",
+    "dev:demo": "pnpm --filter @research-agent-platform/contracts build && vite --mode demo --host 127.0.0.1",
+    "build": "vite build",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --root ../.. apps/web/tests",
+    "check:production": "node scripts/check-production.mjs",
+    "preview": "vite preview --host 127.0.0.1"
+  },
+  "dependencies": {
+    "@research-agent-platform/contracts": "workspace:*",
+    "@phosphor-icons/web": "2.1.2"
+  },
+  "devDependencies": {
+    "vite": "8.3.0",
+    "typescript": "6.0.3"
+  }
+}

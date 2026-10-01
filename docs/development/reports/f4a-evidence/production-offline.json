@@ -1,0 +1,16 @@
+{
+  "production": true,
+  "actualServiceOffline": true,
+  "viewport": {
+    "width": 390,
+    "height": 844,
+    "scrollWidth": 390
+  },
+  "errors": [],
+  "responses": [
+    {
+      "status": 502,
+      "url": "http://127.0.0.1:4188/api/v1/auth/session"
+    }
+  ]
+}

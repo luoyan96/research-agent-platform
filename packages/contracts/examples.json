@@ -1,0 +1,3096 @@
+{
+  "contractVersion": "0.6.2",
+  "synthetic": true,
+  "scenarios": {
+    "serviceProgressReply": {
+      "data": {
+        "replyVersion": "1.0.0",
+        "intent": "progress",
+        "readAt": "2026-09-21T08:00:00+08:00",
+        "origin": "service_facts",
+        "plan": null,
+        "tasks": [
+          {
+            "id": "task_synthetic",
+            "labId": "lab_synthetic",
+            "parentTaskId": null,
+            "planId": "plan_synthetic",
+            "planVersion": 1,
+            "title": "核对合成材料",
+            "taskType": "grant",
+            "goal": "列出缺项",
+            "acceptanceCriteria": "缺项明确",
+            "initiatorId": "member_A",
+            "leadId": "member_B",
+            "reviewerId": "member_A",
+            "participantIds": [],
+            "status": "blocked",
+            "blocker": {
+              "reason": "合成材料缺失",
+              "requestedMemberId": "member_A",
+              "requestedAction": "提供获准材料",
+              "resumeStatus": "in_progress"
+            },
+            "dependencies": [],
+            "schedule": {
+              "suggested": null,
+              "hardDeadline": null,
+              "committed": null,
+              "estimatedHumanHours": null,
+              "checkpoint": null
+            },
+            "access": {
+              "visibility": "participants",
+              "summary": null
+            },
+            "version": 3,
+            "createdAt": "2026-09-21T08:00:00+08:00",
+            "updatedAt": "2026-09-21T08:00:00+08:00",
+            "allowedActions": [
+              "resume",
+              "cancel"
+            ]
+          }
+        ],
+        "truncated": false,
+        "gaps": [
+          "Availability is unknown; task counts are not workload."
+        ],
+        "actions": []
+      }
+    },
+    "groundedChecklist": {
+      "data": {
+        "title": "Synthetic evidence checklist",
+        "items": [
+          {
+            "requirement": "Record the supplied metric",
+            "assessment": "supported_by_input",
+            "citations": [
+              {
+                "artifactId": "synthetic_text",
+                "quote": "Metric A: 12 samples."
+              }
+            ],
+            "gap": null
+          },
+          {
+            "requirement": "Check the missing measurement",
+            "assessment": "gap",
+            "citations": [],
+            "gap": "No measurement supplied."
+          }
+        ],
+        "limitations": [
+          "Only the authorized supplied text was checked; no external verification."
+        ]
+      }
+    },
+    "unknownModelUsage": {
+      "data": {
+        "inputTokens": null,
+        "outputTokens": null,
+        "elapsedMs": 100,
+        "cost": null,
+        "currency": null
+      }
+    },
+    "pendingScopeChange": {
+      "data": {
+        "id": "change_synthetic",
+        "taskId": "task_synthetic",
+        "expectedTaskVersion": 3,
+        "scope": "Expanded synthetic checklist",
+        "dependencies": [],
+        "createdBy": "member_A",
+        "createdAt": "2026-09-21T08:00:00+08:00",
+        "goal": "New synthetic goal",
+        "acceptanceCriteria": "Trace every item",
+        "schedule": {
+          "suggested": null,
+          "hardDeadline": null,
+          "committed": null,
+          "estimatedHumanHours": null,
+          "checkpoint": null
+        },
+        "proposedLeadId": "member_B",
+        "reason": "Synthetic scope change; old commitment remains until acceptance",
+        "requiredMemberIds": [
+          "member_A",
+          "member_B"
+        ],
+        "decisions": [
+          {
+            "memberId": "member_A",
+            "decision": "accepted",
+            "at": "2026-09-21T08:00:00+08:00"
+          }
+        ],
+        "status": "pending",
+        "version": 1
+      }
+    },
+    "preservedDownstreamImpact": {
+      "data": {
+        "id": "impact_synthetic",
+        "taskId": "task_synthetic",
+        "upstreamTaskId": "upstream_synthetic",
+        "upstreamVersion": 5,
+        "kind": "changed",
+        "affectedRevisions": [
+          1
+        ],
+        "createdAt": "2026-09-21T08:00:00+08:00",
+        "acknowledgedBy": null,
+        "acknowledgedAt": null,
+        "comment": null
+      }
+    },
+    "revokedArtifactMetadata": {
+      "data": {
+        "accessStatus": "revoked",
+        "id": "artifact_synthetic",
+        "taskId": "task_synthetic",
+        "filename": "synthetic.txt",
+        "mediaType": "text/plain",
+        "size": 1,
+        "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "version": 2,
+        "createdAt": "2026-09-21T08:00:00+08:00"
+      }
+    },
+    "ownDraftPage": {
+      "data": [
+        {
+          "id": "plan_synthetic",
+          "ownerId": "member_A",
+          "labId": "lab_synthetic",
+          "goal": "整理合成申请材料",
+          "version": 1,
+          "status": "draft",
+          "createdAt": "2026-09-21T08:00:00+08:00"
+        }
+      ],
+      "nextCursor": null,
+      "snapshot": {
+        "token": "synthetic_snapshot_not_usable_for_auth",
+        "at": "2026-09-21T08:00:00+08:00",
+        "expiresAt": "2026-09-21T08:15:00+08:00"
+      }
+    },
+    "emptyAuthorizedOverview": {
+      "data": {
+        "counts": {
+          "unassigned": 0,
+          "active": 0,
+          "review": 0,
+          "completed": 0
+        },
+        "acceptedDeliverables": 0,
+        "submittedDeliverables": 0,
+        "blockedTaskIds": [],
+        "blockedTaskIdsTruncated": false,
+        "pendingActions": {
+          "invitationResponses": 0,
+          "deliverableReviews": 0
+        },
+        "updatedAt": "2026-09-21T08:00:00+08:00"
+      },
+      "snapshot": {
+        "token": "synthetic_snapshot_not_usable_for_auth",
+        "at": "2026-09-21T08:00:00+08:00",
+        "expiresAt": "2026-09-21T08:15:00+08:00"
+      }
+    },
+    "requiredReview": {
+      "data": [
+        {
+          "kind": "deliverable_review",
+          "task": {
+            "id": "task_synthetic",
+            "labId": "lab_synthetic",
+            "parentTaskId": null,
+            "planId": "plan_synthetic",
+            "planVersion": 1,
+            "title": "核对合成材料",
+            "taskType": "grant",
+            "goal": "列出缺项",
+            "acceptanceCriteria": "缺项明确",
+            "initiatorId": "member_A",
+            "leadId": "member_B",
+            "reviewerId": "member_A",
+            "participantIds": [],
+            "status": "in_review",
+            "blocker": null,
+            "dependencies": [],
+            "schedule": {
+              "suggested": null,
+              "hardDeadline": null,
+              "committed": null,
+              "estimatedHumanHours": null,
+              "checkpoint": null
+            },
+            "access": {
+              "visibility": "participants",
+              "summary": null
+            },
+            "version": 3,
+            "createdAt": "2026-09-21T08:00:00+08:00",
+            "updatedAt": "2026-09-21T08:00:00+08:00",
+            "allowedActions": [
+              "review"
+            ]
+          },
+          "deliverableId": "delivery_synthetic",
+          "revision": 1,
+          "deliverableVersion": 1
+        }
+      ],
+      "nextCursor": null,
+      "snapshot": {
+        "token": "synthetic_snapshot_not_usable_for_auth",
+        "at": "2026-09-21T08:00:00+08:00",
+        "expiresAt": "2026-09-21T08:15:00+08:00"
+      }
+    },
+    "expiredAvailability": {
+      "data": {
+        "id": "member_B",
+        "labId": "lab_synthetic",
+        "displayName": "Synthetic B",
+        "publicExpertise": [],
+        "availability": {
+          "from": "2000-01-01",
+          "to": "2000-01-02",
+          "timezone": "UTC",
+          "level": "available",
+          "hours": null,
+          "updatedAt": "2000-01-01T00:00:00Z"
+        },
+        "availabilityStatus": "expired",
+        "visibleCommitmentsTruncated": false,
+        "visibleCommitments": [],
+        "version": 1
+      },
+      "snapshot": {
+        "token": "synthetic_snapshot_not_usable_for_auth",
+        "at": "2026-09-21T08:00:00+08:00",
+        "expiresAt": "2026-09-21T08:15:00+08:00"
+      }
+    },
+    "expiredSnapshot": {
+      "error": {
+        "code": "CURSOR_EXPIRED",
+        "message": "合成错误，未执行真实业务",
+        "requestId": "request_synthetic"
+      }
+    },
+    "missingDeadlineDraft": {
+      "data": {
+        "labId": "lab_synthetic",
+        "goal": "整理合成申请材料",
+        "proposedItems": [
+          {
+            "id": "item_1",
+            "title": "核对材料",
+            "goal": "标明缺项",
+            "deliverable": "合成材料清单",
+            "acceptanceCriteria": "每项可追溯，缺项明确",
+            "allocation": {
+              "kind": "invitation",
+              "memberId": "member_B"
+            },
+            "dependencies": [],
+            "schedule": {
+              "suggested": null,
+              "hardDeadline": null,
+              "committed": null,
+              "estimatedHumanHours": null,
+              "checkpoint": null
+            },
+            "inputArtifactIds": [],
+            "budget": null
+          }
+        ],
+        "unresolvedQuestions": [
+          "交付日期待确认"
+        ],
+        "id": "plan_synthetic",
+        "ownerId": "member_A",
+        "version": 1,
+        "status": "draft",
+        "createdAt": "2026-09-21T08:00:00+08:00"
+      }
+    },
+    "invitationPlan": {
+      "data": {
+        "labId": "lab_synthetic",
+        "goal": "整理合成申请材料",
+        "proposedItems": [
+          {
+            "id": "item_1",
+            "title": "核对材料",
+            "goal": "标明缺项",
+            "deliverable": "合成材料清单",
+            "acceptanceCriteria": "每项可追溯，缺项明确",
+            "allocation": {
+              "kind": "invitation",
+              "memberId": "member_B"
+            },
+            "dependencies": [],
+            "schedule": {
+              "suggested": null,
+              "hardDeadline": null,
+              "committed": null,
+              "estimatedHumanHours": null,
+              "checkpoint": null
+            },
+            "inputArtifactIds": [],
+            "budget": null
+          }
+        ],
+        "unresolvedQuestions": [
+          "交付日期待确认"
+        ],
+        "id": "plan_synthetic",
+        "ownerId": "member_A",
+        "version": 1,
+        "status": "draft",
+        "createdAt": "2026-09-21T08:00:00+08:00"
+      }
+    },
+    "claimSummary": {
+      "data": {
+        "projection": "claim_summary",
+        "visibleStatus": "awaiting_acceptance",
+        "id": "task_claim",
+        "labId": "lab_synthetic",
+        "title": "合成认领事项",
+        "summary": "仅公开的必要摘要",
+        "deliverable": "清单",
+        "acceptanceCriteria": "缺项明确",
+        "schedule": {
+          "suggested": null,
+          "hardDeadline": null,
+          "committed": null,
+          "estimatedHumanHours": null,
+          "checkpoint": null
+        },
+        "initiatorId": "member_A",
+        "reviewerId": "member_A",
+        "version": 1,
+        "allowedActions": [
+          "claim"
+        ],
+        "pendingInvitation": null
+      }
+    },
+    "invitationSummary": {
+      "data": {
+        "projection": "claim_summary",
+        "visibleStatus": "awaiting_acceptance",
+        "id": "task_invited",
+        "labId": "lab_synthetic",
+        "title": "合成受邀事项",
+        "summary": "接受前必要摘要",
+        "deliverable": "材料清单",
+        "acceptanceCriteria": "缺项明确",
+        "schedule": {
+          "suggested": null,
+          "hardDeadline": null,
+          "committed": null,
+          "estimatedHumanHours": null,
+          "checkpoint": null
+        },
+        "initiatorId": "member_A",
+        "reviewerId": "member_A",
+        "version": 1,
+        "allowedActions": [
+          "decide"
+        ],
+        "pendingInvitation": {
+          "id": "invitation_B",
+          "version": 1,
+          "scope": "材料清单",
+          "schedule": {
+            "suggested": null,
+            "hardDeadline": null,
+            "committed": null,
+            "estimatedHumanHours": null,
+            "checkpoint": null
+          }
+        }
+      }
+    },
+    "blockedTask": {
+      "data": {
+        "id": "task_synthetic",
+        "labId": "lab_synthetic",
+        "parentTaskId": null,
+        "planId": "plan_synthetic",
+        "planVersion": 1,
+        "title": "核对合成材料",
+        "taskType": "grant",
+        "goal": "列出缺项",
+        "acceptanceCriteria": "缺项明确",
+        "initiatorId": "member_A",
+        "leadId": "member_B",
+        "reviewerId": "member_A",
+        "participantIds": [],
+        "status": "blocked",
+        "blocker": {
+          "reason": "合成材料缺失",
+          "requestedMemberId": "member_A",
+          "requestedAction": "提供获准材料",
+          "resumeStatus": "in_progress"
+        },
+        "dependencies": [],
+        "schedule": {
+          "suggested": null,
+          "hardDeadline": null,
+          "committed": null,
+          "estimatedHumanHours": null,
+          "checkpoint": null
+        },
+        "access": {
+          "visibility": "participants",
+          "summary": null
+        },
+        "version": 3,
+        "createdAt": "2026-09-21T08:00:00+08:00",
+        "updatedAt": "2026-09-21T08:00:00+08:00",
+        "allowedActions": [
+          "resume",
+          "cancel"
+        ]
+      }
+    },
+    "pendingReview": {
+      "data": {
+        "id": "delivery_synthetic",
+        "taskId": "task_synthetic",
+        "revision": 1,
+        "submittedBy": "member_B",
+        "artifactRefs": [],
+        "summary": "合成清单：两项资料待补充",
+        "sources": [
+          {
+            "kind": "note",
+            "locator": "synthetic-input-1",
+            "label": "合成材料"
+          }
+        ],
+        "submittedAt": "2026-09-21T08:00:00+08:00",
+        "review": null,
+        "version": 1
+      }
+    },
+    "cancelledTask": {
+      "data": {
+        "id": "task_synthetic",
+        "labId": "lab_synthetic",
+        "parentTaskId": null,
+        "planId": "plan_synthetic",
+        "planVersion": 1,
+        "title": "核对合成材料",
+        "taskType": "grant",
+        "goal": "列出缺项",
+        "acceptanceCriteria": "缺项明确",
+        "initiatorId": "member_A",
+        "leadId": "member_B",
+        "reviewerId": "member_A",
+        "participantIds": [],
+        "status": "cancelled",
+        "blocker": null,
+        "dependencies": [],
+        "schedule": {
+          "suggested": null,
+          "hardDeadline": null,
+          "committed": null,
+          "estimatedHumanHours": null,
+          "checkpoint": null
+        },
+        "access": {
+          "visibility": "participants",
+          "summary": null
+        },
+        "version": 4,
+        "createdAt": "2026-09-21T08:00:00+08:00",
+        "updatedAt": "2026-09-21T08:00:00+08:00",
+        "allowedActions": []
+      }
+    },
+    "unknownAvailability": {
+      "data": {
+        "id": "member_B",
+        "labId": "lab_synthetic",
+        "displayName": "Synthetic B",
+        "publicExpertise": [],
+        "availability": null,
+        "availabilityStatus": "unknown",
+        "visibleCommitmentsTruncated": false,
+        "visibleCommitments": [],
+        "version": 1
+      }
+    },
+    "versionConflict": {
+      "error": {
+        "code": "VERSION_CONFLICT",
+        "message": "合成错误，未执行真实业务",
+        "requestId": "request_synthetic"
+      }
+    },
+    "concurrentClaimFailure": {
+      "error": {
+        "code": "ALREADY_CLAIMED",
+        "message": "合成错误，未执行真实业务",
+        "requestId": "request_synthetic"
+      }
+    },
+    "modelUnavailable": {
+      "error": {
+        "code": "MODEL_UNAVAILABLE",
+        "message": "合成错误，未执行真实业务",
+        "requestId": "request_synthetic"
+      }
+    },
+    "privateCapabilityOwner": {
+      "data": [
+        {
+          "id": "private_B_1",
+          "labId": "lab_synthetic",
+          "ownerId": "member_B",
+          "maintainerIds": [],
+          "visibility": "private",
+          "version": 1,
+          "name": "合成私人方法",
+          "inputContract": "合成文本",
+          "outputContract": "合成清单",
+          "status": "draft",
+          "validationResultIds": []
+        }
+      ],
+      "nextCursor": null
+    },
+    "privateCapabilityOther": {
+      "data": [],
+      "nextCursor": null
+    }
+  },
+  "endpoints": {
+    "live": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "GET",
+      "path": "/api/v1/health/live",
+      "stage": "B0",
+      "status": 200,
+      "request": {
+        "params": {},
+        "query": {},
+        "headers": {},
+        "body": null
+      },
+      "response": {
+        "data": {
+          "status": "ok",
+          "contractVersion": "0.6.2",
+          "checks": {
+            "database": "ok",
+            "storage": "ok",
+            "authentication": "ok",
+            "harness": "not_verified"
+          }
+        }
+      }
+    },
+    "ready": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "GET",
+      "path": "/api/v1/health/ready",
+      "stage": "B0",
+      "status": 200,
+      "request": {
+        "params": {},
+        "query": {},
+        "headers": {},
+        "body": null
+      },
+      "response": {
+        "data": {
+          "status": "ok",
+          "contractVersion": "0.6.2",
+          "checks": {
+            "database": "ok",
+            "storage": "ok",
+            "authentication": "ok",
+            "harness": "not_verified"
+          }
+        }
+      }
+    },
+    "login": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "POST",
+      "path": "/api/v1/auth/login",
+      "stage": "B1",
+      "status": 200,
+      "request": {
+        "params": {},
+        "query": {},
+        "headers": {},
+        "body": {
+          "username": "synthetic",
+          "password": "syntheticxxx"
+        }
+      },
+      "response": {
+        "data": {
+          "id": "synthetic",
+          "labId": "synthetic",
+          "displayName": "synthetic",
+          "publicExpertise": [],
+          "availability": null,
+          "visibleCommitments": [],
+          "version": 1
+        }
+      }
+    },
+    "session": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "GET",
+      "path": "/api/v1/auth/session",
+      "stage": "B1",
+      "status": 200,
+      "request": {
+        "params": {},
+        "query": {},
+        "headers": {},
+        "body": null
+      },
+      "response": {
+        "data": {
+          "member": {
+            "id": "synthetic",
+            "labId": "synthetic",
+            "displayName": "synthetic",
+            "publicExpertise": [],
+            "availability": null,
+            "visibleCommitments": [],
+            "version": 1
+          },
+          "csrfToken": "synthetic",
+          "expiresAt": "2026-09-21T08:00:00+08:00"
+        }
+      }
+    },
+    "logout": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "POST",
+      "path": "/api/v1/auth/logout",
+      "stage": "B1",
+      "status": 200,
+      "request": {
+        "params": {},
+        "query": {},
+        "headers": {},
+        "body": {}
+      },
+      "response": {
+        "data": {
+          "loggedOut": true
+        }
+      }
+    },
+    "me": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "GET",
+      "path": "/api/v1/me",
+      "stage": "B1",
+      "status": 200,
+      "request": {
+        "params": {},
+        "query": {},
+        "headers": {},
+        "body": null
+      },
+      "response": {
+        "data": {
+          "id": "synthetic",
+          "labId": "synthetic",
+          "displayName": "synthetic",
+          "publicExpertise": [],
+          "availability": null,
+          "visibleCommitments": [],
+          "version": 1
+        }
+      }
+    },
+    "members": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "GET",
+      "path": "/api/v1/labs/{id}/members",
+      "stage": "B1",
+      "status": 200,
+      "request": {
+        "params": {
+          "id": "synthetic"
+        },
+        "query": {
+          "limit": 30
+        },
+        "headers": {},
+        "body": null
+      },
+      "response": {
+        "data": [],
+        "nextCursor": null
+      }
+    },
+    "availability": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "PATCH",
+      "path": "/api/v1/me/availability",
+      "stage": "B2a",
+      "status": 200,
+      "request": {
+        "params": {},
+        "query": {},
+        "headers": {
+          "Idempotency-Key": "synthetic_command_0001"
+        },
+        "body": {
+          "expectedVersion": 1,
+          "availability": null
+        }
+      },
+      "response": {
+        "data": {
+          "id": "synthetic",
+          "labId": "synthetic",
+          "displayName": "synthetic",
+          "publicExpertise": [],
+          "availability": null,
+          "visibleCommitments": [],
+          "version": 1
+        }
+      }
+    },
+    "plans": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "GET",
+      "path": "/api/v1/plans",
+      "stage": "B2a",
+      "status": 200,
+      "request": {
+        "params": {},
+        "query": {
+          "limit": 30,
+          "status": "draft"
+        },
+        "headers": {},
+        "body": null
+      },
+      "response": {
+        "data": [],
+        "nextCursor": null,
+        "snapshot": {
+          "token": "synthetic",
+          "at": "2026-09-21T08:00:00+08:00",
+          "expiresAt": "2026-09-21T08:00:00+08:00"
+        }
+      }
+    },
+    "actionItems": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "GET",
+      "path": "/api/v1/labs/{id}/action-items",
+      "stage": "B2a",
+      "status": 200,
+      "request": {
+        "params": {
+          "id": "synthetic"
+        },
+        "query": {
+          "limit": 30,
+          "kind": "all"
+        },
+        "headers": {},
+        "body": null
+      },
+      "response": {
+        "data": [],
+        "nextCursor": null,
+        "snapshot": {
+          "token": "synthetic",
+          "at": "2026-09-21T08:00:00+08:00",
+          "expiresAt": "2026-09-21T08:00:00+08:00"
+        }
+      }
+    },
+    "createPlan": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "POST",
+      "path": "/api/v1/plans",
+      "stage": "B1",
+      "status": 201,
+      "request": {
+        "params": {},
+        "query": {},
+        "headers": {
+          "Idempotency-Key": "synthetic_command_0001"
+        },
+        "body": {
+          "labId": "synthetic",
+          "goal": "synthetic",
+          "proposedItems": [],
+          "unresolvedQuestions": []
+        }
+      },
+      "response": {
+        "data": {
+          "labId": "synthetic",
+          "goal": "synthetic",
+          "proposedItems": [],
+          "unresolvedQuestions": [],
+          "id": "synthetic",
+          "ownerId": "synthetic",
+          "version": 1,
+          "status": "draft",
+          "createdAt": "2026-09-21T08:00:00+08:00"
+        }
+      }
+    },
+    "getPlan": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "GET",
+      "path": "/api/v1/plans/{id}",
+      "stage": "B1",
+      "status": 200,
+      "request": {
+        "params": {
+          "id": "synthetic"
+        },
+        "query": {},
+        "headers": {},
+        "body": null
+      },
+      "response": {
+        "data": {
+          "labId": "synthetic",
+          "goal": "synthetic",
+          "proposedItems": [],
+          "unresolvedQuestions": [],
+          "id": "synthetic",
+          "ownerId": "synthetic",
+          "version": 1,
+          "status": "draft",
+          "createdAt": "2026-09-21T08:00:00+08:00"
+        }
+      }
+    },
+    "editPlan": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "PATCH",
+      "path": "/api/v1/plans/{id}",
+      "stage": "B1",
+      "status": 200,
+      "request": {
+        "params": {
+          "id": "synthetic"
+        },
+        "query": {},
+        "headers": {
+          "Idempotency-Key": "synthetic_command_0001"
+        },
+        "body": {
+          "expectedVersion": 1,
+          "labId": "synthetic",
+          "goal": "synthetic",
+          "proposedItems": [],
+          "unresolvedQuestions": []
+        }
+      },
+      "response": {
+        "data": {
+          "labId": "synthetic",
+          "goal": "synthetic",
+          "proposedItems": [],
+          "unresolvedQuestions": [],
+          "id": "synthetic",
+          "ownerId": "synthetic",
+          "version": 1,
+          "status": "draft",
+          "createdAt": "2026-09-21T08:00:00+08:00"
+        }
+      }
+    },
+    "confirmPlan": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "POST",
+      "path": "/api/v1/plans/{id}/confirm",
+      "stage": "B1",
+      "status": 200,
+      "request": {
+        "params": {
+          "id": "synthetic"
+        },
+        "query": {},
+        "headers": {
+          "Idempotency-Key": "synthetic_command_0001"
+        },
+        "body": {
+          "expectedVersion": 1
+        }
+      },
+      "response": {
+        "data": {
+          "plan": {
+            "labId": "synthetic",
+            "goal": "synthetic",
+            "proposedItems": [],
+            "unresolvedQuestions": [],
+            "id": "synthetic",
+            "ownerId": "synthetic",
+            "version": 1,
+            "status": "draft",
+            "createdAt": "2026-09-21T08:00:00+08:00"
+          },
+          "taskIds": []
+        }
+      }
+    },
+    "tasks": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "GET",
+      "path": "/api/v1/tasks",
+      "stage": "B1",
+      "status": 200,
+      "request": {
+        "params": {},
+        "query": {
+          "limit": 30,
+          "labId": "synthetic",
+          "scope": "lab"
+        },
+        "headers": {},
+        "body": null
+      },
+      "response": {
+        "data": [],
+        "nextCursor": null
+      }
+    },
+    "task": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "GET",
+      "path": "/api/v1/tasks/{id}",
+      "stage": "B1",
+      "status": 200,
+      "request": {
+        "params": {
+          "id": "synthetic"
+        },
+        "query": {},
+        "headers": {},
+        "body": null
+      },
+      "response": {
+        "data": {
+          "task": {
+            "id": "synthetic",
+            "labId": "synthetic",
+            "parentTaskId": null,
+            "planId": "synthetic",
+            "planVersion": 1,
+            "title": "synthetic",
+            "taskType": "paper",
+            "goal": "synthetic",
+            "acceptanceCriteria": "synthetic",
+            "initiatorId": "synthetic",
+            "leadId": null,
+            "reviewerId": "synthetic",
+            "participantIds": [],
+            "status": "unassigned",
+            "blocker": null,
+            "dependencies": [],
+            "schedule": {
+              "suggested": null,
+              "hardDeadline": null,
+              "committed": null,
+              "estimatedHumanHours": null,
+              "checkpoint": null
+            },
+            "access": {
+              "visibility": "participants",
+              "summary": null
+            },
+            "version": 1,
+            "createdAt": "2026-09-21T08:00:00+08:00",
+            "updatedAt": "2026-09-21T08:00:00+08:00",
+            "allowedActions": []
+          },
+          "assignments": [],
+          "deliverables": [],
+          "executions": []
+        }
+      }
+    },
+    "invite": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "POST",
+      "path": "/api/v1/tasks/{id}/invitations",
+      "stage": "B1",
+      "status": 201,
+      "request": {
+        "params": {
+          "id": "synthetic"
+        },
+        "query": {},
+        "headers": {
+          "Idempotency-Key": "synthetic_command_0001"
+        },
+        "body": {
+          "expectedVersion": 1,
+          "memberId": "synthetic",
+          "scope": "synthetic",
+          "schedule": {
+            "suggested": null,
+            "hardDeadline": null,
+            "committed": null,
+            "estimatedHumanHours": null,
+            "checkpoint": null
+          }
+        }
+      },
+      "response": {
+        "data": {
+          "id": "synthetic",
+          "taskId": "synthetic",
+          "kind": "self",
+          "memberId": null,
+          "capability": null,
+          "status": "pending",
+          "commitment": null,
+          "transferToMemberId": null,
+          "version": 1
+        }
+      }
+    },
+    "invitationDecision": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "POST",
+      "path": "/api/v1/invitations/{id}/decision",
+      "stage": "B1",
+      "status": 200,
+      "request": {
+        "params": {
+          "id": "synthetic"
+        },
+        "query": {},
+        "headers": {
+          "Idempotency-Key": "synthetic_command_0001"
+        },
+        "body": {
+          "expectedVersion": 1,
+          "expectedTaskVersion": 1,
+          "decision": "accepted",
+          "comment": null
+        }
+      },
+      "response": {
+        "data": {
+          "id": "synthetic",
+          "taskId": "synthetic",
+          "kind": "self",
+          "memberId": null,
+          "capability": null,
+          "status": "pending",
+          "commitment": null,
+          "transferToMemberId": null,
+          "version": 1
+        }
+      }
+    },
+    "claim": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "POST",
+      "path": "/api/v1/tasks/{id}/claim",
+      "stage": "B1",
+      "status": 200,
+      "request": {
+        "params": {
+          "id": "synthetic"
+        },
+        "query": {},
+        "headers": {
+          "Idempotency-Key": "synthetic_command_0001"
+        },
+        "body": {
+          "expectedVersion": 1
+        }
+      },
+      "response": {
+        "data": {
+          "id": "synthetic",
+          "taskId": "synthetic",
+          "kind": "self",
+          "memberId": null,
+          "capability": null,
+          "status": "pending",
+          "commitment": null,
+          "transferToMemberId": null,
+          "version": 1
+        }
+      }
+    },
+    "start": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "POST",
+      "path": "/api/v1/tasks/{id}/start",
+      "stage": "B1",
+      "status": 200,
+      "request": {
+        "params": {
+          "id": "synthetic"
+        },
+        "query": {},
+        "headers": {
+          "Idempotency-Key": "synthetic_command_0001"
+        },
+        "body": {
+          "expectedVersion": 1
+        }
+      },
+      "response": {
+        "data": {
+          "id": "synthetic",
+          "labId": "synthetic",
+          "parentTaskId": null,
+          "planId": "synthetic",
+          "planVersion": 1,
+          "title": "synthetic",
+          "taskType": "paper",
+          "goal": "synthetic",
+          "acceptanceCriteria": "synthetic",
+          "initiatorId": "synthetic",
+          "leadId": null,
+          "reviewerId": "synthetic",
+          "participantIds": [],
+          "status": "unassigned",
+          "blocker": null,
+          "dependencies": [],
+          "schedule": {
+            "suggested": null,
+            "hardDeadline": null,
+            "committed": null,
+            "estimatedHumanHours": null,
+            "checkpoint": null
+          },
+          "access": {
+            "visibility": "participants",
+            "summary": null
+          },
+          "version": 1,
+          "createdAt": "2026-09-21T08:00:00+08:00",
+          "updatedAt": "2026-09-21T08:00:00+08:00",
+          "allowedActions": []
+        }
+      }
+    },
+    "block": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "POST",
+      "path": "/api/v1/tasks/{id}/block",
+      "stage": "B2b",
+      "status": 200,
+      "request": {
+        "params": {
+          "id": "synthetic"
+        },
+        "query": {},
+        "headers": {
+          "Idempotency-Key": "synthetic_command_0001"
+        },
+        "body": {
+          "expectedVersion": 1,
+          "reason": "synthetic",
+          "requestedMemberId": null,
+          "requestedAction": "synthetic"
+        }
+      },
+      "response": {
+        "data": {
+          "id": "synthetic",
+          "labId": "synthetic",
+          "parentTaskId": null,
+          "planId": "synthetic",
+          "planVersion": 1,
+          "title": "synthetic",
+          "taskType": "paper",
+          "goal": "synthetic",
+          "acceptanceCriteria": "synthetic",
+          "initiatorId": "synthetic",
+          "leadId": null,
+          "reviewerId": "synthetic",
+          "participantIds": [],
+          "status": "unassigned",
+          "blocker": null,
+          "dependencies": [],
+          "schedule": {
+            "suggested": null,
+            "hardDeadline": null,
+            "committed": null,
+            "estimatedHumanHours": null,
+            "checkpoint": null
+          },
+          "access": {
+            "visibility": "participants",
+            "summary": null
+          },
+          "version": 1,
+          "createdAt": "2026-09-21T08:00:00+08:00",
+          "updatedAt": "2026-09-21T08:00:00+08:00",
+          "allowedActions": []
+        }
+      }
+    },
+    "resume": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "POST",
+      "path": "/api/v1/tasks/{id}/resume",
+      "stage": "B2b",
+      "status": 200,
+      "request": {
+        "params": {
+          "id": "synthetic"
+        },
+        "query": {},
+        "headers": {
+          "Idempotency-Key": "synthetic_command_0001"
+        },
+        "body": {
+          "expectedVersion": 1
+        }
+      },
+      "response": {
+        "data": {
+          "id": "synthetic",
+          "labId": "synthetic",
+          "parentTaskId": null,
+          "planId": "synthetic",
+          "planVersion": 1,
+          "title": "synthetic",
+          "taskType": "paper",
+          "goal": "synthetic",
+          "acceptanceCriteria": "synthetic",
+          "initiatorId": "synthetic",
+          "leadId": null,
+          "reviewerId": "synthetic",
+          "participantIds": [],
+          "status": "unassigned",
+          "blocker": null,
+          "dependencies": [],
+          "schedule": {
+            "suggested": null,
+            "hardDeadline": null,
+            "committed": null,
+            "estimatedHumanHours": null,
+            "checkpoint": null
+          },
+          "access": {
+            "visibility": "participants",
+            "summary": null
+          },
+          "version": 1,
+          "createdAt": "2026-09-21T08:00:00+08:00",
+          "updatedAt": "2026-09-21T08:00:00+08:00",
+          "allowedActions": []
+        }
+      }
+    },
+    "submit": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "POST",
+      "path": "/api/v1/tasks/{id}/deliverables",
+      "stage": "B1",
+      "status": 201,
+      "request": {
+        "params": {
+          "id": "synthetic"
+        },
+        "query": {},
+        "headers": {
+          "Idempotency-Key": "synthetic_command_0001"
+        },
+        "body": {
+          "expectedVersion": 1,
+          "summary": "synthetic",
+          "artifactRefs": [],
+          "sources": []
+        }
+      },
+      "response": {
+        "data": {
+          "id": "synthetic",
+          "taskId": "synthetic",
+          "revision": 1,
+          "submittedBy": "synthetic",
+          "artifactRefs": [],
+          "summary": "synthetic",
+          "sources": [],
+          "submittedAt": "2026-09-21T08:00:00+08:00",
+          "review": null,
+          "version": 1
+        }
+      }
+    },
+    "review": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "POST",
+      "path": "/api/v1/deliverables/{id}/review",
+      "stage": "B1",
+      "status": 200,
+      "request": {
+        "params": {
+          "id": "synthetic"
+        },
+        "query": {},
+        "headers": {
+          "Idempotency-Key": "synthetic_command_0001"
+        },
+        "body": {
+          "expectedVersion": 1,
+          "expectedTaskVersion": 1,
+          "revision": 1,
+          "decision": "accepted",
+          "comment": "synthetic"
+        }
+      },
+      "response": {
+        "data": {
+          "id": "synthetic",
+          "taskId": "synthetic",
+          "revision": 1,
+          "submittedBy": "synthetic",
+          "artifactRefs": [],
+          "summary": "synthetic",
+          "sources": [],
+          "submittedAt": "2026-09-21T08:00:00+08:00",
+          "review": null,
+          "version": 1
+        }
+      }
+    },
+    "proposeChange": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "POST",
+      "path": "/api/v1/tasks/{id}/change-proposals",
+      "stage": "B2b",
+      "status": 201,
+      "request": {
+        "params": {
+          "id": "synthetic"
+        },
+        "query": {},
+        "headers": {
+          "Idempotency-Key": "synthetic_command_0001"
+        },
+        "body": {
+          "expectedVersion": 1,
+          "scope": "synthetic",
+          "dependencies": [],
+          "goal": "synthetic",
+          "acceptanceCriteria": "synthetic",
+          "schedule": {
+            "suggested": null,
+            "hardDeadline": null,
+            "committed": null,
+            "estimatedHumanHours": null,
+            "checkpoint": null
+          },
+          "proposedLeadId": null,
+          "reason": "synthetic"
+        }
+      },
+      "response": {
+        "data": {
+          "id": "synthetic",
+          "taskId": "synthetic",
+          "expectedTaskVersion": 1,
+          "scope": "synthetic",
+          "dependencies": [],
+          "createdBy": "synthetic",
+          "createdAt": "2026-09-21T08:00:00+08:00",
+          "goal": "synthetic",
+          "acceptanceCriteria": "synthetic",
+          "schedule": {
+            "suggested": null,
+            "hardDeadline": null,
+            "committed": null,
+            "estimatedHumanHours": null,
+            "checkpoint": null
+          },
+          "proposedLeadId": null,
+          "reason": "synthetic",
+          "requiredMemberIds": [
+            "synthetic"
+          ],
+          "decisions": [],
+          "status": "pending",
+          "version": 1
+        }
+      }
+    },
+    "decideChange": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "POST",
+      "path": "/api/v1/change-proposals/{id}/decision",
+      "stage": "B2b",
+      "status": 200,
+      "request": {
+        "params": {
+          "id": "synthetic"
+        },
+        "query": {},
+        "headers": {
+          "Idempotency-Key": "synthetic_command_0001"
+        },
+        "body": {
+          "expectedVersion": 1,
+          "decision": "accepted"
+        }
+      },
+      "response": {
+        "data": {
+          "id": "synthetic",
+          "taskId": "synthetic",
+          "expectedTaskVersion": 1,
+          "scope": "synthetic",
+          "dependencies": [],
+          "createdBy": "synthetic",
+          "createdAt": "2026-09-21T08:00:00+08:00",
+          "goal": "synthetic",
+          "acceptanceCriteria": "synthetic",
+          "schedule": {
+            "suggested": null,
+            "hardDeadline": null,
+            "committed": null,
+            "estimatedHumanHours": null,
+            "checkpoint": null
+          },
+          "proposedLeadId": null,
+          "reason": "synthetic",
+          "requiredMemberIds": [
+            "synthetic"
+          ],
+          "decisions": [],
+          "status": "pending",
+          "version": 1
+        }
+      }
+    },
+    "withdraw": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "POST",
+      "path": "/api/v1/tasks/{id}/withdraw",
+      "stage": "B2b",
+      "status": 200,
+      "request": {
+        "params": {
+          "id": "synthetic"
+        },
+        "query": {},
+        "headers": {
+          "Idempotency-Key": "synthetic_command_0001"
+        },
+        "body": {
+          "expectedVersion": 1,
+          "reason": "synthetic",
+          "transferToMemberId": null,
+          "remainingScope": "synthetic"
+        }
+      },
+      "response": {
+        "data": {
+          "taskId": "synthetic",
+          "taskVersion": 1,
+          "status": "withdrawn"
+        }
+      }
+    },
+    "cancelTask": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "POST",
+      "path": "/api/v1/tasks/{id}/cancel",
+      "stage": "B2b",
+      "status": 200,
+      "request": {
+        "params": {
+          "id": "synthetic"
+        },
+        "query": {},
+        "headers": {
+          "Idempotency-Key": "synthetic_command_0001"
+        },
+        "body": {
+          "expectedVersion": 1,
+          "reason": "synthetic"
+        }
+      },
+      "response": {
+        "data": {
+          "id": "synthetic",
+          "labId": "synthetic",
+          "parentTaskId": null,
+          "planId": "synthetic",
+          "planVersion": 1,
+          "title": "synthetic",
+          "taskType": "paper",
+          "goal": "synthetic",
+          "acceptanceCriteria": "synthetic",
+          "initiatorId": "synthetic",
+          "leadId": null,
+          "reviewerId": "synthetic",
+          "participantIds": [],
+          "status": "unassigned",
+          "blocker": null,
+          "dependencies": [],
+          "schedule": {
+            "suggested": null,
+            "hardDeadline": null,
+            "committed": null,
+            "estimatedHumanHours": null,
+            "checkpoint": null
+          },
+          "access": {
+            "visibility": "participants",
+            "summary": null
+          },
+          "version": 1,
+          "createdAt": "2026-09-21T08:00:00+08:00",
+          "updatedAt": "2026-09-21T08:00:00+08:00",
+          "allowedActions": []
+        }
+      }
+    },
+    "overview": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "GET",
+      "path": "/api/v1/labs/{id}/overview",
+      "stage": "B2a",
+      "status": 200,
+      "request": {
+        "params": {
+          "id": "synthetic"
+        },
+        "query": {
+          "scope": "lab"
+        },
+        "headers": {},
+        "body": null
+      },
+      "response": {
+        "data": {
+          "counts": {
+            "unassigned": 0,
+            "active": 0,
+            "review": 0,
+            "completed": 0
+          },
+          "acceptedDeliverables": 0,
+          "submittedDeliverables": 0,
+          "blockedTaskIds": [],
+          "blockedTaskIdsTruncated": false,
+          "pendingActions": {
+            "invitationResponses": 0,
+            "deliverableReviews": 0
+          },
+          "updatedAt": "2026-09-21T08:00:00+08:00"
+        },
+        "snapshot": {
+          "token": "synthetic",
+          "at": "2026-09-21T08:00:00+08:00",
+          "expiresAt": "2026-09-21T08:00:00+08:00"
+        }
+      }
+    },
+    "revokeAccess": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "POST",
+      "path": "/api/v1/tasks/{id}/revoke-access",
+      "stage": "B2b",
+      "status": 200,
+      "request": {
+        "params": {
+          "id": "synthetic"
+        },
+        "query": {},
+        "headers": {
+          "Idempotency-Key": "synthetic_command_0001"
+        },
+        "body": {
+          "expectedVersion": 1,
+          "reason": "synthetic",
+          "memberId": "synthetic"
+        }
+      },
+      "response": {
+        "data": {
+          "id": "synthetic",
+          "labId": "synthetic",
+          "parentTaskId": null,
+          "planId": "synthetic",
+          "planVersion": 1,
+          "title": "synthetic",
+          "taskType": "paper",
+          "goal": "synthetic",
+          "acceptanceCriteria": "synthetic",
+          "initiatorId": "synthetic",
+          "leadId": null,
+          "reviewerId": "synthetic",
+          "participantIds": [],
+          "status": "unassigned",
+          "blocker": null,
+          "dependencies": [],
+          "schedule": {
+            "suggested": null,
+            "hardDeadline": null,
+            "committed": null,
+            "estimatedHumanHours": null,
+            "checkpoint": null
+          },
+          "access": {
+            "visibility": "participants",
+            "summary": null
+          },
+          "version": 1,
+          "createdAt": "2026-09-21T08:00:00+08:00",
+          "updatedAt": "2026-09-21T08:00:00+08:00",
+          "allowedActions": []
+        }
+      }
+    },
+    "revokeArtifact": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "POST",
+      "path": "/api/v1/artifacts/{id}/revoke",
+      "stage": "B2b",
+      "status": 200,
+      "request": {
+        "params": {
+          "id": "synthetic"
+        },
+        "query": {},
+        "headers": {
+          "Idempotency-Key": "synthetic_command_0001"
+        },
+        "body": {
+          "expectedVersion": 1,
+          "reason": "synthetic"
+        }
+      },
+      "response": {
+        "data": {
+          "id": "synthetic",
+          "taskId": "synthetic",
+          "filename": "synthetic",
+          "mediaType": "text/plain",
+          "size": 1,
+          "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "version": 1,
+          "createdAt": "2026-09-21T08:00:00+08:00"
+        }
+      }
+    },
+    "acknowledgeImpacts": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "POST",
+      "path": "/api/v1/tasks/{id}/dependency-impacts/acknowledge",
+      "stage": "B2b",
+      "status": 200,
+      "request": {
+        "params": {
+          "id": "synthetic"
+        },
+        "query": {},
+        "headers": {
+          "Idempotency-Key": "synthetic_command_0001"
+        },
+        "body": {
+          "expectedVersion": 1,
+          "impactIds": [
+            "synthetic"
+          ],
+          "comment": "synthetic"
+        }
+      },
+      "response": {
+        "data": {
+          "id": "synthetic",
+          "labId": "synthetic",
+          "parentTaskId": null,
+          "planId": "synthetic",
+          "planVersion": 1,
+          "title": "synthetic",
+          "taskType": "paper",
+          "goal": "synthetic",
+          "acceptanceCriteria": "synthetic",
+          "initiatorId": "synthetic",
+          "leadId": null,
+          "reviewerId": "synthetic",
+          "participantIds": [],
+          "status": "unassigned",
+          "blocker": null,
+          "dependencies": [],
+          "schedule": {
+            "suggested": null,
+            "hardDeadline": null,
+            "committed": null,
+            "estimatedHumanHours": null,
+            "checkpoint": null
+          },
+          "access": {
+            "visibility": "participants",
+            "summary": null
+          },
+          "version": 1,
+          "createdAt": "2026-09-21T08:00:00+08:00",
+          "updatedAt": "2026-09-21T08:00:00+08:00",
+          "allowedActions": []
+        }
+      }
+    },
+    "events": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "GET",
+      "path": "/api/v1/tasks/{id}/events",
+      "stage": "B2b",
+      "status": 200,
+      "request": {
+        "params": {
+          "id": "synthetic"
+        },
+        "query": {
+          "limit": 30
+        },
+        "headers": {},
+        "body": null
+      },
+      "response": {
+        "data": [],
+        "nextCursor": null
+      }
+    },
+    "upload": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "POST",
+      "path": "/api/v1/artifacts",
+      "stage": "B2b",
+      "status": 201,
+      "request": {
+        "params": {},
+        "query": {},
+        "headers": {
+          "Idempotency-Key": "synthetic_command_0001"
+        },
+        "body": {
+          "taskId": "synthetic",
+          "expectedVersion": 1,
+          "filename": "synthetic",
+          "mediaType": "text/plain",
+          "contentBase64": "eA=="
+        }
+      },
+      "response": {
+        "data": {
+          "id": "synthetic",
+          "taskId": "synthetic",
+          "filename": "synthetic",
+          "mediaType": "text/plain",
+          "size": 1,
+          "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "version": 1,
+          "createdAt": "2026-09-21T08:00:00+08:00"
+        }
+      }
+    },
+    "artifact": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "GET",
+      "path": "/api/v1/artifacts/{id}",
+      "stage": "B2b",
+      "status": 200,
+      "request": {
+        "params": {
+          "id": "synthetic"
+        },
+        "query": {},
+        "headers": {},
+        "body": null
+      },
+      "response": {
+        "data": {
+          "id": "synthetic",
+          "taskId": "synthetic",
+          "filename": "synthetic",
+          "mediaType": "text/plain",
+          "size": 1,
+          "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "version": 1,
+          "createdAt": "2026-09-21T08:00:00+08:00"
+        }
+      }
+    },
+    "content": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "GET",
+      "path": "/api/v1/artifacts/{id}/content",
+      "stage": "B2b",
+      "status": 200,
+      "request": {
+        "params": {
+          "id": "synthetic"
+        },
+        "query": {},
+        "headers": {},
+        "body": null
+      },
+      "response": {
+        "0": 120
+      }
+    },
+    "planRequest": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "POST",
+      "path": "/api/v1/planning-requests",
+      "stage": "B3",
+      "status": 202,
+      "request": {
+        "params": {},
+        "query": {},
+        "headers": {
+          "Idempotency-Key": "synthetic_command_0001"
+        },
+        "body": {
+          "labId": "synthetic",
+          "prompt": "synthetic",
+          "conclusionRefs": [],
+          "intent": "auto",
+          "plan": null,
+          "taskIds": [],
+          "inputArtifactIds": [],
+          "budget": {
+            "maxTokens": 1,
+            "maxSeconds": 1
+          }
+        }
+      },
+      "response": {
+        "data": {
+          "id": "synthetic",
+          "status": "queued",
+          "planId": null,
+          "failure": null,
+          "version": 1,
+          "reply": null,
+          "usage": null,
+          "createdAt": "2026-09-21T08:00:00+08:00",
+          "updatedAt": "2026-09-21T08:00:00+08:00"
+        }
+      }
+    },
+    "getPlanRequest": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "GET",
+      "path": "/api/v1/planning-requests/{id}",
+      "stage": "B3",
+      "status": 200,
+      "request": {
+        "params": {
+          "id": "synthetic"
+        },
+        "query": {},
+        "headers": {},
+        "body": null
+      },
+      "response": {
+        "data": {
+          "id": "synthetic",
+          "status": "queued",
+          "planId": null,
+          "failure": null,
+          "version": 1,
+          "reply": null,
+          "usage": null,
+          "createdAt": "2026-09-21T08:00:00+08:00",
+          "updatedAt": "2026-09-21T08:00:00+08:00"
+        }
+      }
+    },
+    "run": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "POST",
+      "path": "/api/v1/tasks/{id}/runs",
+      "stage": "B3",
+      "status": 202,
+      "request": {
+        "params": {
+          "id": "synthetic"
+        },
+        "query": {},
+        "headers": {
+          "Idempotency-Key": "synthetic_command_0001"
+        },
+        "body": {
+          "expectedVersion": 1,
+          "capability": {
+            "id": "synthetic",
+            "version": 1,
+            "visibility": "lab_public"
+          },
+          "budget": {
+            "maxTokens": 1,
+            "maxSeconds": 1
+          },
+          "inputArtifactIds": [],
+          "conclusionRefs": []
+        }
+      },
+      "response": {
+        "data": {
+          "id": "synthetic",
+          "taskId": "synthetic",
+          "capability": {
+            "id": "synthetic",
+            "version": 1,
+            "visibility": "lab_public"
+          },
+          "status": "queued",
+          "attempt": 0,
+          "usage": null,
+          "failure": null,
+          "resultRefs": [],
+          "createdAt": "2026-09-21T08:00:00+08:00",
+          "startedAt": null,
+          "endedAt": null,
+          "version": 1,
+          "requestedBy": "synthetic",
+          "taskVersion": 1,
+          "plan": {
+            "id": "synthetic",
+            "version": 1
+          },
+          "permissionVersion": 1,
+          "inputs": [],
+          "budget": {
+            "maxTokens": 1,
+            "maxSeconds": 1
+          },
+          "maxAttempts": 1,
+          "nextAttemptAt": null,
+          "candidate": null,
+          "candidateDeliverableId": null,
+          "allowedActions": [],
+          "provider": "synthetic",
+          "model": "synthetic",
+          "harnessVersion": "synthetic",
+          "updatedAt": "2026-09-21T08:00:00+08:00",
+          "usageDetail": null
+        }
+      }
+    },
+    "getRun": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "GET",
+      "path": "/api/v1/runs/{id}",
+      "stage": "B3",
+      "status": 200,
+      "request": {
+        "params": {
+          "id": "synthetic"
+        },
+        "query": {},
+        "headers": {},
+        "body": null
+      },
+      "response": {
+        "data": {
+          "id": "synthetic",
+          "taskId": "synthetic",
+          "capability": {
+            "id": "synthetic",
+            "version": 1,
+            "visibility": "lab_public"
+          },
+          "status": "queued",
+          "attempt": 0,
+          "usage": null,
+          "failure": null,
+          "resultRefs": [],
+          "createdAt": "2026-09-21T08:00:00+08:00",
+          "startedAt": null,
+          "endedAt": null,
+          "version": 1,
+          "requestedBy": "synthetic",
+          "taskVersion": 1,
+          "plan": {
+            "id": "synthetic",
+            "version": 1
+          },
+          "permissionVersion": 1,
+          "inputs": [],
+          "budget": {
+            "maxTokens": 1,
+            "maxSeconds": 1
+          },
+          "maxAttempts": 1,
+          "nextAttemptAt": null,
+          "candidate": null,
+          "candidateDeliverableId": null,
+          "allowedActions": [],
+          "provider": "synthetic",
+          "model": "synthetic",
+          "harnessVersion": "synthetic",
+          "updatedAt": "2026-09-21T08:00:00+08:00",
+          "usageDetail": null
+        }
+      }
+    },
+    "cancelRun": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "POST",
+      "path": "/api/v1/runs/{id}/cancel",
+      "stage": "B3",
+      "status": 200,
+      "request": {
+        "params": {
+          "id": "synthetic"
+        },
+        "query": {},
+        "headers": {
+          "Idempotency-Key": "synthetic_command_0001"
+        },
+        "body": {
+          "expectedVersion": 1,
+          "reason": "synthetic"
+        }
+      },
+      "response": {
+        "data": {
+          "id": "synthetic",
+          "taskId": "synthetic",
+          "capability": {
+            "id": "synthetic",
+            "version": 1,
+            "visibility": "lab_public"
+          },
+          "status": "queued",
+          "attempt": 0,
+          "usage": null,
+          "failure": null,
+          "resultRefs": [],
+          "createdAt": "2026-09-21T08:00:00+08:00",
+          "startedAt": null,
+          "endedAt": null,
+          "version": 1,
+          "requestedBy": "synthetic",
+          "taskVersion": 1,
+          "plan": {
+            "id": "synthetic",
+            "version": 1
+          },
+          "permissionVersion": 1,
+          "inputs": [],
+          "budget": {
+            "maxTokens": 1,
+            "maxSeconds": 1
+          },
+          "maxAttempts": 1,
+          "nextAttemptAt": null,
+          "candidate": null,
+          "candidateDeliverableId": null,
+          "allowedActions": [],
+          "provider": "synthetic",
+          "model": "synthetic",
+          "harnessVersion": "synthetic",
+          "updatedAt": "2026-09-21T08:00:00+08:00",
+          "usageDetail": null
+        }
+      }
+    },
+    "publicCapabilities": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "GET",
+      "path": "/api/v1/public-capabilities",
+      "stage": "B3",
+      "status": 200,
+      "request": {
+        "params": {},
+        "query": {},
+        "headers": {},
+        "body": null
+      },
+      "response": {
+        "data": [],
+        "nextCursor": null
+      }
+    },
+    "retryRun": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "POST",
+      "path": "/api/v1/runs/{id}/retry",
+      "stage": "B3",
+      "status": 202,
+      "request": {
+        "params": {
+          "id": "synthetic"
+        },
+        "query": {},
+        "headers": {
+          "Idempotency-Key": "synthetic_command_0001"
+        },
+        "body": {
+          "expectedVersion": 1,
+          "expectedTaskVersion": 1,
+          "inputArtifactIds": []
+        }
+      },
+      "response": {
+        "data": {
+          "id": "synthetic",
+          "taskId": "synthetic",
+          "capability": {
+            "id": "synthetic",
+            "version": 1,
+            "visibility": "lab_public"
+          },
+          "status": "queued",
+          "attempt": 0,
+          "usage": null,
+          "failure": null,
+          "resultRefs": [],
+          "createdAt": "2026-09-21T08:00:00+08:00",
+          "startedAt": null,
+          "endedAt": null,
+          "version": 1,
+          "requestedBy": "synthetic",
+          "taskVersion": 1,
+          "plan": {
+            "id": "synthetic",
+            "version": 1
+          },
+          "permissionVersion": 1,
+          "inputs": [],
+          "budget": {
+            "maxTokens": 1,
+            "maxSeconds": 1
+          },
+          "maxAttempts": 1,
+          "nextAttemptAt": null,
+          "candidate": null,
+          "candidateDeliverableId": null,
+          "allowedActions": [],
+          "provider": "synthetic",
+          "model": "synthetic",
+          "harnessVersion": "synthetic",
+          "updatedAt": "2026-09-21T08:00:00+08:00",
+          "usageDetail": null
+        }
+      }
+    },
+    "submitCandidate": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "POST",
+      "path": "/api/v1/runs/{id}/submit",
+      "stage": "B3",
+      "status": 201,
+      "request": {
+        "params": {
+          "id": "synthetic"
+        },
+        "query": {},
+        "headers": {
+          "Idempotency-Key": "synthetic_command_0001"
+        },
+        "body": {
+          "expectedVersion": 1,
+          "expectedTaskVersion": 1
+        }
+      },
+      "response": {
+        "data": {
+          "id": "synthetic",
+          "taskId": "synthetic",
+          "revision": 1,
+          "submittedBy": "synthetic",
+          "artifactRefs": [],
+          "summary": "synthetic",
+          "sources": [],
+          "submittedAt": "2026-09-21T08:00:00+08:00",
+          "review": null,
+          "version": 1
+        }
+      }
+    },
+    "cancelPlanning": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "POST",
+      "path": "/api/v1/planning-requests/{id}/cancel",
+      "stage": "B3",
+      "status": 200,
+      "request": {
+        "params": {
+          "id": "synthetic"
+        },
+        "query": {},
+        "headers": {
+          "Idempotency-Key": "synthetic_command_0001"
+        },
+        "body": {
+          "expectedVersion": 1,
+          "reason": "synthetic"
+        }
+      },
+      "response": {
+        "data": {
+          "id": "synthetic",
+          "status": "queued",
+          "planId": null,
+          "failure": null,
+          "version": 1,
+          "reply": null,
+          "usage": null,
+          "createdAt": "2026-09-21T08:00:00+08:00",
+          "updatedAt": "2026-09-21T08:00:00+08:00"
+        }
+      }
+    },
+    "planningRequests": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "GET",
+      "path": "/api/v1/planning-requests",
+      "stage": "B4a",
+      "status": 200,
+      "request": {
+        "params": {},
+        "query": {
+          "limit": 30
+        },
+        "headers": {},
+        "body": null
+      },
+      "response": {
+        "data": [],
+        "nextCursor": null,
+        "total": 0
+      }
+    },
+    "conclusions": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "GET",
+      "path": "/api/v1/conclusions",
+      "stage": "B4a",
+      "status": 200,
+      "request": {
+        "params": {},
+        "query": {
+          "limit": 30
+        },
+        "headers": {},
+        "body": null
+      },
+      "response": {
+        "data": [],
+        "nextCursor": null,
+        "total": 0
+      }
+    },
+    "retainConclusion": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "POST",
+      "path": "/api/v1/tasks/{id}/conclusions",
+      "stage": "B4a",
+      "status": 201,
+      "request": {
+        "params": {
+          "id": "synthetic"
+        },
+        "query": {},
+        "headers": {
+          "Idempotency-Key": "synthetic_command_0001"
+        },
+        "body": {
+          "expectedVersion": 1,
+          "deliverable": {
+            "id": "synthetic",
+            "version": 1
+          },
+          "artifactRefs": [],
+          "conclusion": "synthetic",
+          "applicability": "synthetic",
+          "scope": "owner_only"
+        }
+      },
+      "response": {
+        "data": {
+          "deliverable": {
+            "id": "synthetic",
+            "version": 1
+          },
+          "artifactRefs": [],
+          "conclusion": "synthetic",
+          "applicability": "synthetic",
+          "scope": "owner_only",
+          "allowedActions": [],
+          "id": "synthetic",
+          "taskId": "synthetic",
+          "sourceTaskVersion": 1,
+          "confirmedBy": "synthetic",
+          "version": 1,
+          "status": "current",
+          "createdAt": "2026-09-21T08:00:00+08:00"
+        }
+      }
+    },
+    "conclusion": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "GET",
+      "path": "/api/v1/conclusions/{id}",
+      "stage": "B4a",
+      "status": 200,
+      "request": {
+        "params": {
+          "id": "synthetic"
+        },
+        "query": {},
+        "headers": {},
+        "body": null
+      },
+      "response": {
+        "data": {
+          "deliverable": {
+            "id": "synthetic",
+            "version": 1
+          },
+          "artifactRefs": [],
+          "conclusion": "synthetic",
+          "applicability": "synthetic",
+          "scope": "owner_only",
+          "allowedActions": [],
+          "id": "synthetic",
+          "taskId": "synthetic",
+          "sourceTaskVersion": 1,
+          "confirmedBy": "synthetic",
+          "version": 1,
+          "status": "current",
+          "createdAt": "2026-09-21T08:00:00+08:00"
+        }
+      }
+    },
+    "conclusionHistory": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "GET",
+      "path": "/api/v1/conclusions/{id}/history",
+      "stage": "B4a",
+      "status": 200,
+      "request": {
+        "params": {
+          "id": "synthetic"
+        },
+        "query": {},
+        "headers": {},
+        "body": null
+      },
+      "response": {
+        "data": []
+      }
+    },
+    "reviseConclusion": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "POST",
+      "path": "/api/v1/conclusions/{id}/revisions",
+      "stage": "B4a",
+      "status": 201,
+      "request": {
+        "params": {
+          "id": "synthetic"
+        },
+        "query": {},
+        "headers": {
+          "Idempotency-Key": "synthetic_command_0001"
+        },
+        "body": {
+          "expectedVersion": 1,
+          "expectedTaskVersion": 1,
+          "deliverable": {
+            "id": "synthetic",
+            "version": 1
+          },
+          "artifactRefs": [],
+          "conclusion": "synthetic",
+          "applicability": "synthetic",
+          "scope": "owner_only"
+        }
+      },
+      "response": {
+        "data": {
+          "deliverable": {
+            "id": "synthetic",
+            "version": 1
+          },
+          "artifactRefs": [],
+          "conclusion": "synthetic",
+          "applicability": "synthetic",
+          "scope": "owner_only",
+          "allowedActions": [],
+          "id": "synthetic",
+          "taskId": "synthetic",
+          "sourceTaskVersion": 1,
+          "confirmedBy": "synthetic",
+          "version": 1,
+          "status": "current",
+          "createdAt": "2026-09-21T08:00:00+08:00"
+        }
+      }
+    },
+    "revokeConclusion": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "POST",
+      "path": "/api/v1/conclusions/{id}/revoke",
+      "stage": "B4a",
+      "status": 200,
+      "request": {
+        "params": {
+          "id": "synthetic"
+        },
+        "query": {},
+        "headers": {
+          "Idempotency-Key": "synthetic_command_0001"
+        },
+        "body": {
+          "expectedVersion": 1,
+          "reason": "synthetic"
+        }
+      },
+      "response": {
+        "data": {
+          "id": "synthetic",
+          "version": 1,
+          "status": "revoked"
+        }
+      }
+    },
+    "createSample": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "POST",
+      "path": "/api/v1/tasks/{id}/public-method-feedback",
+      "stage": "B4a",
+      "status": 201,
+      "request": {
+        "params": {
+          "id": "synthetic"
+        },
+        "query": {},
+        "headers": {
+          "Idempotency-Key": "synthetic_command_0001"
+        },
+        "body": {
+          "expectedVersion": 1,
+          "deliverable": {
+            "id": "synthetic",
+            "version": 1
+          },
+          "decision": "share_selected",
+          "selectedText": null,
+          "authorizeLabUse": false
+        }
+      },
+      "response": {
+        "data": {
+          "allowedActions": [],
+          "id": "synthetic",
+          "taskId": "synthetic",
+          "deliverable": {
+            "id": "synthetic",
+            "version": 1
+          },
+          "sourceTaskVersion": 1,
+          "grantedBy": "synthetic",
+          "selectedText": null,
+          "decision": "share_selected",
+          "status": "available",
+          "version": 1,
+          "createdAt": "2026-09-21T08:00:00+08:00"
+        }
+      }
+    },
+    "samples": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "GET",
+      "path": "/api/v1/public-text-method/samples",
+      "stage": "B4a",
+      "status": 200,
+      "request": {
+        "params": {},
+        "query": {
+          "limit": 30
+        },
+        "headers": {},
+        "body": null
+      },
+      "response": {
+        "data": [],
+        "nextCursor": null,
+        "total": 0
+      }
+    },
+    "taskSamples": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "GET",
+      "path": "/api/v1/tasks/{id}/public-method-feedback",
+      "stage": "B4a",
+      "status": 200,
+      "request": {
+        "params": {
+          "id": "synthetic"
+        },
+        "query": {
+          "limit": 30
+        },
+        "headers": {},
+        "body": null
+      },
+      "response": {
+        "data": [],
+        "nextCursor": null,
+        "total": 0
+      }
+    },
+    "revokeSample": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "POST",
+      "path": "/api/v1/public-text-method/samples/{id}/revoke",
+      "stage": "B4a",
+      "status": 200,
+      "request": {
+        "params": {
+          "id": "synthetic"
+        },
+        "query": {},
+        "headers": {
+          "Idempotency-Key": "synthetic_command_0001"
+        },
+        "body": {
+          "expectedVersion": 1,
+          "reason": "synthetic"
+        }
+      },
+      "response": {
+        "data": {
+          "id": "synthetic",
+          "version": 1,
+          "status": "revoked"
+        }
+      }
+    },
+    "publicMethods": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "GET",
+      "path": "/api/v1/public-text-method",
+      "stage": "B4a",
+      "status": 200,
+      "request": {
+        "params": {},
+        "query": {},
+        "headers": {},
+        "body": null
+      },
+      "response": {
+        "data": {
+          "allowedActions": [],
+          "capabilityId": "synthetic",
+          "generation": 1,
+          "activeMethodVersion": 1,
+          "enabled": false,
+          "ownerId": "synthetic",
+          "methods": []
+        }
+      }
+    },
+    "createMethod": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "POST",
+      "path": "/api/v1/public-text-method/versions",
+      "stage": "B4a",
+      "status": 201,
+      "request": {
+        "params": {},
+        "query": {},
+        "headers": {
+          "Idempotency-Key": "synthetic_command_0001"
+        },
+        "body": {
+          "expectedVersion": 1,
+          "config": {
+            "emphasis": "metrics",
+            "detail": "concise",
+            "citations": "exact_quote"
+          },
+          "sampleIds": [
+            "synthetic"
+          ]
+        }
+      },
+      "response": {
+        "data": {
+          "allowedActions": [],
+          "validationRunIds": [],
+          "version": 1,
+          "capabilityId": "synthetic",
+          "labId": "synthetic",
+          "config": {
+            "emphasis": "metrics",
+            "detail": "concise",
+            "citations": "exact_quote"
+          },
+          "sampleIds": [],
+          "createdBy": null,
+          "createdAt": "2026-09-21T08:00:00+08:00",
+          "origin": "legacy_b3",
+          "usable": false
+        }
+      }
+    },
+    "trialMethod": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "POST",
+      "path": "/api/v1/public-text-method/trials",
+      "stage": "B4a",
+      "status": 202,
+      "request": {
+        "params": {},
+        "query": {},
+        "headers": {
+          "Idempotency-Key": "synthetic_command_0001"
+        },
+        "body": {
+          "expectedVersion": 1,
+          "methodVersion": 1,
+          "taskId": "synthetic",
+          "expectedTaskVersion": 1,
+          "budget": {
+            "maxTokens": 1,
+            "maxSeconds": 1
+          }
+        }
+      },
+      "response": {
+        "data": {
+          "id": "synthetic",
+          "taskId": "synthetic",
+          "capability": {
+            "id": "synthetic",
+            "version": 1,
+            "visibility": "lab_public"
+          },
+          "status": "queued",
+          "attempt": 0,
+          "usage": null,
+          "failure": null,
+          "resultRefs": [],
+          "createdAt": "2026-09-21T08:00:00+08:00",
+          "startedAt": null,
+          "endedAt": null,
+          "version": 1,
+          "requestedBy": "synthetic",
+          "taskVersion": 1,
+          "plan": {
+            "id": "synthetic",
+            "version": 1
+          },
+          "permissionVersion": 1,
+          "inputs": [],
+          "budget": {
+            "maxTokens": 1,
+            "maxSeconds": 1
+          },
+          "maxAttempts": 1,
+          "nextAttemptAt": null,
+          "candidate": null,
+          "candidateDeliverableId": null,
+          "allowedActions": [],
+          "provider": "synthetic",
+          "model": "synthetic",
+          "harnessVersion": "synthetic",
+          "updatedAt": "2026-09-21T08:00:00+08:00",
+          "usageDetail": null
+        }
+      }
+    },
+    "activateMethod": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "POST",
+      "path": "/api/v1/public-text-method/activate",
+      "stage": "B4a",
+      "status": 200,
+      "request": {
+        "params": {},
+        "query": {},
+        "headers": {
+          "Idempotency-Key": "synthetic_command_0001"
+        },
+        "body": {
+          "expectedVersion": 1,
+          "methodVersion": 1,
+          "runId": "synthetic",
+          "confirm": true
+        }
+      },
+      "response": {
+        "data": {
+          "allowedActions": [],
+          "capabilityId": "synthetic",
+          "generation": 1,
+          "activeMethodVersion": 1,
+          "enabled": false,
+          "ownerId": "synthetic",
+          "methods": []
+        }
+      }
+    },
+    "disableMethod": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "POST",
+      "path": "/api/v1/public-text-method/disable",
+      "stage": "B4a",
+      "status": 200,
+      "request": {
+        "params": {},
+        "query": {},
+        "headers": {
+          "Idempotency-Key": "synthetic_command_0001"
+        },
+        "body": {
+          "expectedVersion": 1,
+          "reason": "synthetic"
+        }
+      },
+      "response": {
+        "data": {
+          "allowedActions": [],
+          "capabilityId": "synthetic",
+          "generation": 1,
+          "activeMethodVersion": 1,
+          "enabled": false,
+          "ownerId": "synthetic",
+          "methods": []
+        }
+      }
+    },
+    "methodEvents": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "GET",
+      "path": "/api/v1/public-text-method/events",
+      "stage": "B4a",
+      "status": 200,
+      "request": {
+        "params": {},
+        "query": {
+          "limit": 30
+        },
+        "headers": {},
+        "body": null
+      },
+      "response": {
+        "data": [],
+        "nextCursor": null
+      }
+    },
+    "capabilities": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "GET",
+      "path": "/api/v1/capabilities",
+      "stage": "B4",
+      "status": 200,
+      "request": {
+        "params": {},
+        "query": {
+          "limit": 30,
+          "labId": "synthetic",
+          "scope": "public"
+        },
+        "headers": {},
+        "body": null
+      },
+      "response": {
+        "data": [],
+        "nextCursor": null
+      }
+    },
+    "createCapability": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "POST",
+      "path": "/api/v1/capabilities",
+      "stage": "B4",
+      "status": 201,
+      "request": {
+        "params": {},
+        "query": {},
+        "headers": {
+          "Idempotency-Key": "synthetic_command_0001"
+        },
+        "body": {
+          "labId": "synthetic",
+          "name": "synthetic",
+          "inputContract": "synthetic",
+          "outputContract": "synthetic"
+        }
+      },
+      "response": {
+        "data": {
+          "id": "synthetic",
+          "labId": "synthetic",
+          "ownerId": "synthetic",
+          "maintainerIds": [],
+          "visibility": "private",
+          "version": 1,
+          "name": "synthetic",
+          "inputContract": "synthetic",
+          "outputContract": "synthetic",
+          "status": "draft",
+          "validationResultIds": []
+        }
+      }
+    },
+    "testCapability": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "POST",
+      "path": "/api/v1/capabilities/{id}/test-runs",
+      "stage": "B4",
+      "status": 202,
+      "request": {
+        "params": {
+          "id": "synthetic"
+        },
+        "query": {},
+        "headers": {
+          "Idempotency-Key": "synthetic_command_0001"
+        },
+        "body": {
+          "expectedVersion": 1,
+          "input": "synthetic",
+          "budget": {
+            "maxTokens": 1,
+            "maxSeconds": 1
+          }
+        }
+      },
+      "response": {
+        "data": {
+          "id": "synthetic",
+          "capabilityId": "synthetic",
+          "capabilityVersion": 1,
+          "status": "queued",
+          "result": null
+        }
+      }
+    },
+    "publish": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "POST",
+      "path": "/api/v1/capabilities/{id}/publish",
+      "stage": "B4",
+      "status": 200,
+      "request": {
+        "params": {
+          "id": "synthetic"
+        },
+        "query": {},
+        "headers": {
+          "Idempotency-Key": "synthetic_command_0001"
+        },
+        "body": {
+          "expectedVersion": 1,
+          "validationResultId": "synthetic",
+          "authorizePublication": true
+        }
+      },
+      "response": {
+        "data": {
+          "id": "synthetic",
+          "labId": "synthetic",
+          "ownerId": "synthetic",
+          "maintainerIds": [],
+          "visibility": "private",
+          "version": 1,
+          "name": "synthetic",
+          "inputContract": "synthetic",
+          "outputContract": "synthetic",
+          "status": "draft",
+          "validationResultIds": []
+        }
+      }
+    },
+    "disable": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "POST",
+      "path": "/api/v1/capabilities/{id}/disable",
+      "stage": "B4",
+      "status": 200,
+      "request": {
+        "params": {
+          "id": "synthetic"
+        },
+        "query": {},
+        "headers": {
+          "Idempotency-Key": "synthetic_command_0001"
+        },
+        "body": {
+          "expectedVersion": 1,
+          "reason": "synthetic"
+        }
+      },
+      "response": {
+        "data": {
+          "id": "synthetic",
+          "labId": "synthetic",
+          "ownerId": "synthetic",
+          "maintainerIds": [],
+          "visibility": "private",
+          "version": 1,
+          "name": "synthetic",
+          "inputContract": "synthetic",
+          "outputContract": "synthetic",
+          "status": "draft",
+          "validationResultIds": []
+        }
+      }
+    },
+    "knowledge": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "GET",
+      "path": "/api/v1/tasks/{id}/knowledge",
+      "stage": "B4",
+      "status": 200,
+      "request": {
+        "params": {
+          "id": "synthetic"
+        },
+        "query": {
+          "limit": 30
+        },
+        "headers": {},
+        "body": null
+      },
+      "response": {
+        "data": [],
+        "nextCursor": null
+      }
+    },
+    "feedback": {
+      "contractVersion": "0.6.2",
+      "synthetic": true,
+      "method": "POST",
+      "path": "/api/v1/tasks/{id}/feedback-sharing",
+      "stage": "B4",
+      "status": 200,
+      "request": {
+        "params": {
+          "id": "synthetic"
+        },
+        "query": {},
+        "headers": {
+          "Idempotency-Key": "synthetic_command_0001"
+        },
+        "body": {
+          "expectedVersion": 1,
+          "deliverableId": "synthetic",
+          "revision": 1,
+          "decision": "share_selected",
+          "selectedText": null,
+          "purpose": "public_capability_improvement"
+        }
+      },
+      "response": {
+        "data": {
+          "id": "synthetic",
+          "taskId": "synthetic",
+          "deliverableId": "synthetic",
+          "revision": 1,
+          "decision": "share_selected",
+          "selectedText": null,
+          "purpose": "public_capability_improvement",
+          "version": 1
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "contractVersion": "0.6.1",
+  "realService": true,
+  "realModel": false,
+  "syntheticMaterials": true,
+  "checks": [
+    "A14a 接受交付后不共享仍保持已验收，不默认上传已填片段",
+    "失败保留留存输入，重试使用同一 key 与完整原 body",
+    "A/B/C 独立会话；仅本人范围拒绝 B/C 直链且列表不出现",
+    "A14d 修订追加版本；旧结论保留且需复核，不静默替换",
+    "新需求不自动选择旧结论",
+    "A14f 关闭全部浏览器后重登从入口找回排队请求；外部取消恢复 F3-01 真实状态",
+    "撤回后列表移除，旧链接服务拒绝"
+  ],
+  "viewports": [
+    {
+      "width": 390,
+      "height": 844,
+      "scrollWidth": 390
+    }
+  ],
+  "console": [],
+  "expectedNetworkErrors": [
+    "Failed to load resource: net::ERR_FAILED"
+  ],
+  "sourceTaskId": "093a9d3b-186e-4a48-918f-a45af8af6410",
+  "conclusionId": "67a6a1e9-e2a7-4235-8860-4323339c3d43",
+  "requestId": "ba58e820-ae56-4dd2-b92f-0c35d8967426"
+}

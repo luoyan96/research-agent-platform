@@ -1,0 +1,55 @@
+$ pnpm check:content && pnpm build && pnpm typecheck && node scripts/export-contracts.mjs --check && pnpm test && node scripts/check-b0-process.mjs && pnpm --filter @research-agent/web check:production
+$ node scripts/check-content.mjs
+Checked 67 Markdown files and 10 skill definitions.
+$ pnpm -r build
+Scope: 5 of 6 workspace projects
+packages/research-core build$ tsc -p tsconfig.json
+packages/contracts build$ tsc -p tsconfig.json
+packages/research-skills build$ tsc -p tsconfig.json && node ../../scripts/copy-skills.mjs
+packages/research-core build: Done
+packages/research-skills build: Packaged 10 skills from agents/skills.
+packages/research-skills build: Done
+packages/contracts build: Done
+apps/web build$ vite build
+apps/api build$ tsc -p tsconfig.json
+apps/web build: vite v8.3.0 building client environment for production...
+apps/web build: transforming...
+apps/web build: ✓ 8 modules transformed.
+apps/web build: rendering chunks...
+apps/web build: computing gzip size...
+apps/web build: dist/index.html                          0.46 kB │ gzip:   0.29 kB
+apps/web build: dist/assets/Phosphor-DtdjzkpE.woff2    147.38 kB
+apps/web build: dist/assets/Phosphor-CDxgqcPu.ttf      488.63 kB
+apps/web build: dist/assets/Phosphor-BdqudwT5.woff     488.71 kB
+apps/web build: dist/assets/Phosphor-BXRFlF4V.svg    2,996.37 kB │ gzip: 832.83 kB
+apps/web build: dist/assets/index-1lYiT2Ny.css          75.10 kB │ gzip:  15.58 kB
+apps/web build: dist/assets/index-BAE-UPEy.js           11.55 kB │ gzip:   5.13 kB
+apps/web build: ✓ built in 721ms
+apps/web build: Done
+apps/api build: Done
+$ pnpm -r typecheck
+Scope: 5 of 6 workspace projects
+packages/research-core typecheck$ tsc --noEmit -p tsconfig.check.json
+packages/contracts typecheck$ tsc --noEmit -p tsconfig.check.json
+packages/research-skills typecheck$ tsc --noEmit -p tsconfig.check.json
+packages/research-skills typecheck: Done
+packages/research-core typecheck: Done
+packages/contracts typecheck: Done
+apps/web typecheck$ tsc --noEmit
+apps/api typecheck$ tsc --noEmit -p tsconfig.check.json
+apps/web typecheck: Done
+apps/api typecheck: Done
+Contract 0.1.0: OpenAPI and synthetic examples verified.
+$ vitest run
+
+ RUN  v4.1.8 D:/deepseek-agent/research-agent-platform-g0-audit
+
+
+ Test Files  6 passed (6)
+      Tests  86 passed (86)
+   Start at  18:28:25
+   Duration  2.05s (transform 1.14s, setup 0ms, import 3.47s, tests 1.73s, environment 1ms)
+
+B0 process smoke passed: missing DB=503; migrate/seed repeatable; two real HTTP starts=200; 3 synthetic members persisted; no sessions.
+$ node scripts/check-production.mjs
+Production excludes fixtures; explicit demo build rejected.

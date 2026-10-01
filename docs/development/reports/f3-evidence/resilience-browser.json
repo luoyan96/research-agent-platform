@@ -1,0 +1,28 @@
+{
+  "syntheticMaterials": true,
+  "realService": true,
+  "realModel": true,
+  "contractVersion": "0.5.0",
+  "checks": [
+    "A12 真 provider 拒绝不支持模型；传输失败原输入/原 key 重试且无候选",
+    "A12 极小预算真实服务拒绝派发，页面显示失败与未知用量",
+    "A12 真实运行中通过页面取消，晚到事件不写回候选",
+    "A12 运行材料撤权，晚到输出被隔离且下载入口移除",
+    "A11 杀死本测试 worker 后租约到期中断；重启 API 与页面仍可读，未知用量不盲目重试",
+    "F3 新生成表单同账号失效保留输入/原请求，新意图被阻止直至重试",
+    "F3 显式退出/换账号清空旧对话输入",
+    "断线清除运行内容，恢复后重新授权读取"
+  ],
+  "viewports": [],
+  "console": [
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: the server responded with a status of 410 (Gone)",
+    "Failed to load resource: the server responded with a status of 410 (Gone)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+  ],
+  "ids": {
+    "interruptedTask": "4a439cb9-e604-4207-bea8-6d830db8eaee",
+    "interruptedRun": "914a3428-f32b-48d1-9635-9b6a9f28e563"
+  },
+  "consoleExpectation": "Expected injected transport, 401 and provider/budget failures; no uncaught page errors"
+}

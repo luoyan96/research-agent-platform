@@ -1,5 +1,7 @@
 packages:
   - packages/*
+  - apps/*
+  - integrations/deepseek-harness/runtime
 
 minimumReleaseAge: 1440
 strictDepBuilds: true

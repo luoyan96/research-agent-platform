@@ -1,0 +1,13 @@
+{
+  "actual": {
+    "width": 390,
+    "height": 844,
+    "scrollWidth": 390
+  },
+  "taskCards": 0,
+  "fixtureFallback": false,
+  "favicon": 200,
+  "pageErrors": [],
+  "api": "stopped",
+  "production": true
+}

@@ -1,0 +1,58 @@
+{
+  "base": "http://127.0.0.1:4189",
+  "contractVersion": "0.6.1",
+  "checks": [
+    "A/B/C 独立真实会话；契约 0.6.1",
+    "手工保存→同标签页退出重登→入口找回→编辑/确认→移出草案；B/C 无权枚举或读取",
+    "入口优先显示服务待验收事项，并按需展开真实可开始/提交任务",
+    "待回应邀请不算承诺；拒绝后任务访问收回且旧内容清除",
+    "lab/mine 卡片、全量四列计数与读取时刻匹配同一服务快照；C 看不到受限承诺",
+    "首页两个“我参与的”入口清除旧实验室范围及状态筛选，恢复本人未完成任务",
+    "本人可用时间持久保存，另一会话重取一致；过期显示待更新、0 小时不误作未知",
+    "可用时间失败保留输入，重试复用同一 key 与正文",
+    "可用时间旧版本冲突保留输入，读取后明确比较/重新确认，不静默覆盖",
+    "跨读取变更令旧快照明确过期，旧组合清除；手动重读恢复真实详情",
+    "断线立即清理旧受限内容；恢复后手动重同步，无演示回退",
+    "桌面与实际 DOM 390×844 无横向溢出，键盘可聚焦、favicon 200、无 pageerror/覆盖层",
+    "草案跨页保持同一快照、无重复；全量列表不止入口最近 5 项",
+    "新可用时间表单同账号失效恢复原输入/请求；显式退出换 C 清空 B 未提交内容",
+    "只读列表定期探测真实快照失效并清除旧内容，不等待整页刷新或 15 分钟过期"
+  ],
+  "viewports": [
+    {
+      "innerWidth": 1487,
+      "innerHeight": 1058,
+      "clientWidth": 1487,
+      "scrollWidth": 1487
+    },
+    {
+      "innerWidth": 390,
+      "innerHeight": 844,
+      "clientWidth": 390,
+      "scrollWidth": 390
+    }
+  ],
+  "console": [
+    {
+      "type": "error",
+      "text": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_FAILED"
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: the server responded with a status of 410 (Gone)"
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: the server responded with a status of 410 (Gone)"
+    }
+  ],
+  "note": "Console records include deliberate 404/410/network failures. All successful responses came from real B2a."
+}

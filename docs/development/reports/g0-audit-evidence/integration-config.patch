@@ -1,0 +1,74 @@
+diff --git a/package.json b/package.json
+index 3c55c44..0e38d56 100644
+--- a/package.json
++++ b/package.json
+@@ -12,7 +12,7 @@
+     "typecheck": "pnpm -r typecheck",
+     "test": "vitest run",
+     "check:content": "node scripts/check-content.mjs",
+-    "ci": "pnpm check:content && pnpm build && pnpm typecheck && node scripts/export-contracts.mjs --check && pnpm test && node scripts/check-b0-process.mjs",
++    "ci": "pnpm check:content && pnpm build && pnpm typecheck && node scripts/export-contracts.mjs --check && pnpm test && node scripts/check-b0-process.mjs && pnpm --filter @research-agent/web check:production",
+     "demo": "node scripts/demo.mjs",
+     "contracts:export": "node scripts/export-contracts.mjs",
+     "check:b0": "node scripts/export-contracts.mjs --check && vitest run packages/contracts/tests apps/api/tests && node scripts/check-b0-process.mjs",
+diff --git a/pnpm-lock.yaml b/pnpm-lock.yaml
+index 0216628..91e1a5b 100644
+--- a/pnpm-lock.yaml
++++ b/pnpm-lock.yaml
+@@ -27,6 +27,22 @@ importers:
+         specifier: 5.12.5
+         version: 5.12.5
+ 
++  apps/web:
++    dependencies:
++      '@phosphor-icons/web':
++        specifier: 2.1.2
++        version: 2.1.2
++      '@research-agent-platform/contracts':
++        specifier: workspace:*
++        version: link:../../packages/contracts
++    devDependencies:
++      typescript:
++        specifier: 6.0.3
++        version: 6.0.3
++      vite:
++        specifier: 8.3.0
++        version: 8.3.0(@types/node@22.20.0)(yaml@2.8.3)
++
+   packages/contracts:
+     dependencies:
+       zod:
+@@ -70,6 +86,9 @@ packages:
+   '@pinojs/redact@0.4.0':
+     resolution: {integrity: sha512-k2ENnmBugE/rzQfEcdWHcCY+/FM3VLzH9cYEsbdsoqrvzAKRhUZeRNhAZvB8OitQJ1TBed3yqWtdjzS6wJKBwg==}
+ 
++  '@phosphor-icons/web@2.1.2':
++    resolution: {integrity: sha512-rPAR9o/bEcp4Cw4DEeZHXf+nlGCMNGkNDRizYHM47NLxz9vvEHp/Tt6FMK1NcWadzw/pFDPnRBGi/ofRya958A==}
++
+   '@rolldown/binding-android-arm-eabi@1.2.9':
+     resolution: {integrity: sha512-tNISae1QEf/vkb3xkRcjV5SEdzPE97We5IVaa2Z8jSszQPZ8U60B/YCYpw4QI7VidYsBtKavczXf+DyDs9WGxw==}
+     engines: {node: ^20.19.0 || >=22.12.0}
+@@ -666,6 +685,8 @@ snapshots:
+ 
+   '@pinojs/redact@0.4.0': {}
+ 
++  '@phosphor-icons/web@2.1.2': {}
++
+   '@rolldown/binding-android-arm-eabi@1.2.9':
+     optional: true
+ 
+diff --git a/vitest.config.ts b/vitest.config.ts
+index 688d1fa..7d3af08 100644
+--- a/vitest.config.ts
++++ b/vitest.config.ts
+@@ -1,7 +1,7 @@
+-import { defineConfig } from 'vitest/config'
++import { defineConfig } from "vitest/config";
+ 
+ export default defineConfig({
+   test: {
+-    include: ['packages/*/tests/**/*.spec.ts', 'apps/*/tests/**/*.spec.ts'],
++    include: ["packages/*/tests/**/*.spec.ts", "apps/*/tests/**/*.spec.ts"],
+   },
+-})
++});

@@ -1,0 +1,27 @@
+{
+  "syntheticMaterials": true,
+  "realService": true,
+  "realModel": false,
+  "contractVersion": "0.6.1",
+  "checks": [
+    "真实排队状态；隐藏标签页恢复后继续轮询；无变化保留输入焦点；外部取消自动同步",
+    "AI 修改版本冲突保留原目标和输入，刷新展示原版本与新版本，明确采用后更新",
+    "服务允许的等待输入重试保留同一运行和累计预算；没有 worker 就不显示执行成功"
+  ],
+  "viewports": [
+    {
+      "width": 1487,
+      "height": 1058,
+      "scrollWidth": 1487
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scrollWidth": 390
+    }
+  ],
+  "console": [
+    "Failed to load resource: the server responded with a status of 409 (Conflict)"
+  ],
+  "ids": {}
+}

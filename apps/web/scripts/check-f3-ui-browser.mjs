@@ -1,0 +1,39 @@
+// Real B3 browser validation. Requires an isolated synthetic service and worker;
+// invokes the configured paid model, never substitutes fixtures for AI output.
+import {readFile,writeFile,mkdir} from 'node:fs/promises';
+import {resolve} from 'node:path';
+import {pathToFileURL} from 'node:url';
+import assert from 'node:assert/strict';
+import {routes,contractVersion} from '../../../packages/contracts/dist/index.js';
+const {chromium}=await import(process.env.PLAYWRIGHT_MODULE?pathToFileURL(process.env.PLAYWRIGHT_MODULE).href:'playwright');
+const base=process.env.F1_BASE_URL??'http://127.0.0.1:4185',out=resolve(process.env.F3_EVIDENCE_DIR??'.runtime/f3/ui-browser');
+await mkdir(out,{recursive:true});
+const accounts=JSON.parse(await readFile(process.env.F1_CREDENTIALS_FILE??'.runtime/f3/credentials.json','utf8'));
+let browser,contexts,pages;
+const results={syntheticMaterials:true,realService:true,realModel:false,contractVersion,checks:[],viewports:[],console:[],ids:{}},errors=[];
+const check=t=>{results.checks.push(t);console.log('PASS '+t);};
+async function open(){browser=await chromium.launch({channel:process.env.F1_BROWSER_CHANNEL??'msedge',headless:true});contexts=await Promise.all(accounts.map(()=>browser.newContext({viewport:{width:1487,height:1058}})));pages=await Promise.all(contexts.map(c=>c.newPage()));for(const p of pages){p.setDefaultTimeout(12000);p.on('pageerror',e=>errors.push(e.message));p.on('console',m=>{if(m.type()==='error')results.console.push(m.text());});}}
+const click=(p,t)=>p.getByRole('button',{name:t,exact:true}).click();
+const see=(p,t)=>p.getByText(t,{exact:false}).first().waitFor();
+async function login(i){const p=pages[i];await p.goto(base+'/#/login');await p.getByLabel('账号',{exact:true}).fill(accounts[i].username);await p.getByLabel('密码',{exact:true}).fill(accounts[i].password);await click(p,'登录');await see(p,'先处理与你有关的事');}
+async function call(i,n,params={},body=null,expected=routes[n].status){const r=routes[n];let path=r.path;for(const[k,v]of Object.entries(params))path=path.replace('{'+k+'}',v);const headers={Origin:base};if(r.method!=='GET'){const s=await(await contexts[i].request.get(base+'/api/v1/auth/session')).json();headers['X-CSRF-Token']=s.data.csrfToken;headers['Idempotency-Key']=crypto.randomUUID();}const res=await contexts[i].request.fetch(base+path,{method:r.method,headers,...(body===null?{}:{data:body})});const json=await res.json();assert.equal(res.status(),expected,n+' '+JSON.stringify(json.error??{}));return expected>=400?json:r.response.parse(json).data;}
+async function wait(n,id,status){for(let i=0;i<150;i++){const v=await call(0,n,{id});if(status.includes(v.status))return v;if(['failed','cancelled','interrupted'].includes(v.status))throw new Error(n+' '+v.status+' '+v.failure);await new Promise(r=>setTimeout(r,1000));}throw new Error('Real service timeout');}
+async function shot(p,n){await p.screenshot({path:resolve(out,n+'.png'),fullPage:true});}
+async function task(id){const p=pages[0];if(p.url()===base+'/#/tasks/'+id)await p.reload();else await p.goto(base+'/#/tasks/'+id);await see(p,'公共能力运行');await p.locator('#runs').waitFor();return p;}
+async function expand(p,key){const f=p.locator('[data-form="'+key+'"]');await f.evaluate(el=>{for(let n=el.parentElement;n;n=n.parentElement)if(n.tagName==='DETAILS')n.open=true;});return f;}
+async function generate(prompt){const p=pages[0];await p.goto(base+'/#/');await p.locator('#goal').fill(prompt);await click(p,'发送');await p.waitForURL(/#\/planning\//);const id=p.url().split('/planning/')[1];await shot(p,'planning-pending');return wait('getPlanRequest',id,['draft','ready']);}
+const schedule={suggested:null,hardDeadline:null,committed:null,estimatedHumanHours:null,checkpoint:null};
+const item=(title,allocation)=>({id:'item_'+crypto.randomUUID(),title,goal:'核对合成指标',deliverable:'带出处的核对清单',acceptanceCriteria:'列出材料缺口，不编造证据',allocation,dependencies:[],schedule,inputArtifactIds:[],budget:null});
+// Deterministic UI behavior against real B3 HTTP. No worker is started, no model output is fabricated.
+import {createServer} from '../../api/dist/server.js';
+import {readConfig} from '../../api/dist/config.js';
+const server=createServer({...readConfig(),port:3100,origin:base});
+try{
+ await server.listen({host:'127.0.0.1',port:3100});await open();await login(0);const p=pages[0];
+ await p.locator('#goal').fill('合成排队状态，不启动 worker');await click(p,'发送');await p.waitForURL(/#\/planning\//);await see(p,'已排队');const requestId=p.url().split('/planning/')[1];const f=p.locator('[data-form=cancel-planning]');await f.locator('textarea').fill('填写时轮询不应打断');await f.locator('textarea').focus();await p.evaluate(()=>{window.savedField=document.activeElement;Object.defineProperty(document,'hidden',{configurable:true,get:()=>true});});await new Promise(r=>setTimeout(r,3000));await p.evaluate(()=>Object.defineProperty(document,'hidden',{configurable:true,get:()=>false}));await new Promise(r=>setTimeout(r,3000));assert(await p.evaluate(()=>window.savedField===document.activeElement&&window.savedField.isConnected));assert.equal(await f.locator('textarea').inputValue(),'填写时轮询不应打断');
+ await call(0,'cancelPlanning',{id:requestId},{expectedVersion:1,reason:'外部真实服务取消'});await see(p,'生成已取消');assert(!(await p.locator('main').innerText()).includes('生成在后台进行'));await shot(p,'planning-poll-resume');check('真实排队状态；隐藏标签页恢复后继续轮询；无变化保留输入焦点；外部取消自动同步');
+ const plan=await call(0,'createPlan',{}, {labId:'lab_synthetic',goal:'原草案目标',proposedItems:[item('原分工',{kind:'self'})],unresolvedQuestions:[]});await p.goto(base+'/#/plans/'+plan.id);await see(p,'让 AI 修改');let revise=await expand(p,'revise-ai');await revise.locator('textarea').fill('保留这条未提交的修改请求');await call(0,'editPlan',{id:plan.id},{labId:plan.labId,goal:'其他窗口已更新的目标',proposedItems:plan.proposedItems,unresolvedQuestions:[],expectedVersion:plan.version});await revise.getByRole('button').click();await see(p,'VERSION_CONFLICT');await click(p,'读取最新状态');await see(p,'服务端已有版本 2');assert.equal(await p.locator('[data-form=plan] [name=goal]').inputValue(),'原草案目标');assert.equal(await p.locator('[name=revision-prompt]').inputValue(),'保留这条未提交的修改请求');await shot(p,'ai-version-comparison');await click(p,'采用服务端内容');assert.equal(await p.locator('[data-form=plan] [name=goal]').inputValue(),'其他窗口已更新的目标');check('AI 修改版本冲突保留原目标和输入，刷新展示原版本与新版本，明确采用后更新');
+ const cap=(await call(0,'publicCapabilities')).find(c=>c.status==='available');const taskId=(await call(0,'confirmPlan',{id:plan.id},{expectedVersion:2})).taskIds[0];let run=await call(0,'run',{id:taskId},{expectedVersion:1,capability:{id:cap.id,version:cap.version,visibility:'lab_public'},inputArtifactIds:[],budget:{maxTokens:10000,maxSeconds:60}});await task(taskId);await see(p,'等待输入');await click(p,'按原累计预算重试此运行');const after=await call(0,'getRun',{id:run.id});assert.equal(after.id,run.id);assert(after.version>run.version);assert.deepEqual(after.budget,run.budget);assert.equal(after.attempt,0);check('服务允许的等待输入重试保留同一运行和累计预算；没有 worker 就不显示执行成功');
+ for(const v of [{width:1487,height:1058},{width:390,height:844}]){await p.setViewportSize(v);await p.goto(base+'/#/planning/'+requestId);await see(p,'生成已取消');const actual=await p.evaluate(()=>({width:innerWidth,height:innerHeight,scrollWidth:document.documentElement.scrollWidth}));assert.equal(actual.width,v.width);assert.equal(actual.height,v.height);assert.equal(actual.scrollWidth,v.width);results.viewports.push(actual);await shot(p,v.width===390?'planning-mobile':'planning-desktop');}assert.deepEqual(errors,[]);await writeFile(resolve(out,'results.json'),JSON.stringify(results,null,2));
+}catch(error){if(browser)await shot(pages[0],'failure').catch(()=>{});await writeFile(resolve(out,'failure.json'),JSON.stringify({...results,error:String(error),errors},null,2));throw error;}finally{if(browser)await browser.close();await server.close();}
+

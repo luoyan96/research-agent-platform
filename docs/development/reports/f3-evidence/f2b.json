@@ -1,0 +1,47 @@
+{
+  "contractVersion": "0.5.0",
+  "base": "http://127.0.0.1:4185",
+  "checks": [
+    "A/B/C 独立真实密码会话",
+    "A7 待接受与原承诺同时显示；拒绝不改变范围或承诺日期",
+    "A7 接受后任务和已接受承诺同时更新",
+    "A7 并发冲突保留原输入，刷新展示基准与最新版本",
+    "失败重试保留原 key/body；阻塞说明与显式恢复",
+    "A6 未验收依赖阻止开始；关键更新暂停下游，重新绑定/复核/恢复分开执行",
+    "A6 自依赖通过真实服务拒绝，不产生成功安排",
+    "A8 上传失败无可引用附件；原请求重试成功后下载并绑定交付版本",
+    "A8 B 退出后下载失败；C 仅获摘要，另行接受后才有承诺",
+    "A8 附件撤权后旧下载拒绝并清除已显示受限详情",
+    "A8 取消后其他会话快照失效清除，重新读取被拒绝",
+    "A8 显式撤权不能经原任务链接重新进入",
+    "A9 断线清除任务内容，恢复后同一授权服务重新同步",
+    "新协调表单同账号失效后保留输入与原请求，重试不换 key",
+    "显式退出/换账号清除协调输入",
+    "手工草案持久化建议/硬截止/检查节点，不伪造成员承诺",
+    "桌面与实际 390×844；无横向溢出和未捕获异常"
+  ],
+  "viewports": [
+    {
+      "width": 1487,
+      "height": 1058,
+      "scrollWidth": 1487
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scrollWidth": 390
+    }
+  ],
+  "console": [
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: the server responded with a status of 409 (Conflict)",
+    "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Failed to load resource: the server responded with a status of 410 (Gone)",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Failed to load resource: the server responded with a status of 410 (Gone)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+  ]
+}

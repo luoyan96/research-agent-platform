@@ -1,0 +1,111 @@
+{
+  "contractVersion": "0.6.1",
+  "realService": true,
+  "realModel": true,
+  "syntheticMaterials": true,
+  "checks": [
+    "A14b 真正选择结论进入模型，候选引用该版本；关闭全部浏览器后继续执行，重登恢复；成功仍未验收",
+    "A14c 拟邀请无来源权限成员的方案扩大范围被拒绝，界面没有生成或确认成功",
+    "A14e 获准原文样例进入真实 Harness 方法试跑；审查精确运行后显式启用，配置代次与方法版本分开",
+    "非维护者 B/C 无权读取方法与样例维护材料",
+    "明确停用，旧成功试跑保留原方法版本",
+    "样例撤回令方法不可用，旧试跑派生内容不可读取",
+    "A14c 源结论撤回后已显示派生页面清除旧内容，重新读取被拒绝；前台快照探测实测通过",
+    "A14f 真实预算失败请求在关闭浏览器并重新登录后从入口找回，无额外模型调用"
+  ],
+  "viewports": [
+    {
+      "width": 390,
+      "height": 844,
+      "scrollWidth": 390
+    }
+  ],
+  "console": [],
+  "expectedNetworkErrors": [
+    "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+    "Failed to load resource: the server responded with a status of 410 (Gone)",
+    "Failed to load resource: the server responded with a status of 410 (Gone)",
+    "Failed to load resource: the server responded with a status of 410 (Gone)",
+    "Failed to load resource: the server responded with a status of 410 (Gone)"
+  ],
+  "started": {
+    "id": "3048a793-f372-4626-ae3e-f5e6f80a7b3a",
+    "taskId": "11ebc4ad-8aa3-4ac2-a28c-10a4d80706e1",
+    "sourceTaskId": "bbae4a7f-8b5c-49dd-a57f-3303416ef1e8",
+    "conclusionId": "b44cdb27-a1a8-42a2-8d4e-16005732e90d"
+  },
+  "reuse": {
+    "id": "3048a793-f372-4626-ae3e-f5e6f80a7b3a",
+    "attempt": 2,
+    "methodVersion": 1,
+    "configurationGeneration": 1,
+    "conclusionRefs": [
+      {
+        "id": "b44cdb27-a1a8-42a2-8d4e-16005732e90d",
+        "version": 1
+      }
+    ],
+    "usage": {
+      "inputTokens": 486,
+      "outputTokens": 8027,
+      "elapsedMs": 34140,
+      "cost": null,
+      "currency": null
+    },
+    "candidate": {
+      "title": "Assessment of Synthetic Evidence for Missing Data",
+      "items": [
+        {
+          "requirement": "State missing data in the supplied synthetic evidence.",
+          "assessment": "supported_by_input",
+          "citations": [
+            {
+              "artifactId": "conclusion_b44cdb27-a1a8-42a2-8d4e-16005732e90d_v1",
+              "quote": "Metric B has no measurement."
+            }
+          ],
+          "gap": null
+        }
+      ],
+      "limitations": [
+        "Synthetic evidence only; no external scientific validation"
+      ]
+    }
+  },
+  "trial": {
+    "id": "1f5c8d34-2e96-42e5-9f30-f77d054b1355",
+    "methodVersion": 2,
+    "configurationGeneration": 2,
+    "usage": {
+      "inputTokens": 306,
+      "outputTokens": 774,
+      "elapsedMs": 4221,
+      "cost": null,
+      "currency": null
+    },
+    "candidate": {
+      "title": "Missing Data Check for Supplied Synthetic Evidence",
+      "items": [
+        {
+          "requirement": "State the missing data in the supplied synthetic evidence.",
+          "assessment": "gap",
+          "citations": [
+            {
+              "artifactId": "sample_1d34d7ad-ace8-4342-bf62-5da3bb208efd",
+              "quote": "Synthetic cohort A measured twelve samples."
+            }
+          ],
+          "gap": "The input reports only that cohort A measured twelve samples. It does not provide the measured values, variables, units, time points, procedures, inclusion/exclusion criteria, expected sample count, or any missingness indicators, so the missing data cannot be stated or characterized beyond the absence of these details."
+        }
+      ],
+      "limitations": [
+        "Only one short synthetic statement is supplied; no external artifacts or verification are available.",
+        "The response is limited to exact quotes from the supplied material and does not infer unstated facts."
+      ]
+    }
+  },
+  "activated": {
+    "methodVersion": 2,
+    "generation": 3
+  }
+}

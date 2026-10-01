@@ -29,3 +29,20 @@
 原插件依赖本机相邻 Harness 目录。尝试替换为公开依赖时，原 `0.1.0-rc.5` 工具包不可取得，公开 `0.0.1-rc.1` 的安装又因缺少 `@deepseek-ai/dsh-type-meta` 返回 404。当前以基础包独立开发、适配源码待验证处理，详见[适配说明](../integrations/deepseek-harness/README.md)。
 
 新平台已迁入模块的后续维护以本仓库为主。旧仓库可保持既有用途，后续是否归档或改变发布来源单独决定。
+
+## 2026-09-21 F0 前端
+
+在独立 worktree 中从共享文档提交 ed36ac6 新建 apps/web，不迁入旧探索前端或 Harness 源码。按现有 01/08/09 设计图实现 TypeScript + Vite 三页预览；品牌小图裁自 01-entry.png，图标通过官方 Phosphor 依赖消费。未采用包含发布配置的通用演示模板，遵守本仓库 pnpm workspace 和只做 F0 的范围。展示投影与最终服务契约分离，生产不能启动 fixture 模式。
+
+## B3 持久执行（2026-09-30）
+
+共同基线 98bef3bbab897b7d27b1507cb0c557299dab56b6，新增 006-execution.sql，不修改 001—005。规划/运行/尝试队列与通知 outbox 分离；官方 Harness 0.2.0-rc.1 的受限 LlmRuntime 组合纳入默认 workspace，旧六工具插件不接团队权限。安装成功，真实模型目前因凭据缺失未验证。升级与配置见 [B3 联调包](development/b3-handoff.md)。
+
+
+## B4a · 007授权结论与方法维护
+
+共同G3基线后只追加007，不改001—006。保留既有capability.version配置代次，导入不可变legacy_b3方法v1，不伪造发布；为旧运行追加methodVersion/configurationGeneration等元数据。结论修订、递归派生依赖、公开片段授权及方法事件另表保存。真实B3旧库重复升级和原表逐行保留已验证。细节、校验和与启动见 [B4a联调包](development/b4a-handoff.md)。不覆盖别人数据库、不重置旧数据。
+
+## 008：小组维护与恢复
+
+新增account_controls及maintenance_audit，不修改001—007或业务承诺；既有账号维护版本初始化为1。API契约保持0.6.2。升级前停写备份；本版备份工具支持已知G4a迁移前缀，恢复仅到新目录并使旧会话/未结束运行失效。命令、审计、密钥保管与恢复验证见[B5a联调包](development/b5a-handoff.md)。

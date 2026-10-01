@@ -1,0 +1,49 @@
+{
+  "syntheticMaterials": true,
+  "realService": true,
+  "realModel": true,
+  "contractVersion": "0.5.0",
+  "checks": [
+    "A/B/C 三个独立真实密码会话",
+    "A10 真实模型一句话生成、修改同一 planId、从最新草案显式确认",
+    "A10 自然语言查询，进度内容由授权服务事实返回",
+    "A10 B 获得真实可承接候选；C 不可读取 A 的回复",
+    "A11 真实 Harness 产物与出处；关闭全部浏览器后运行持续，重开读取；成功未验收",
+    "A11 候选显式提交后再人工验收；实际 390×844 无横向溢出",
+    "正常操作无 console error 和未捕获异常"
+  ],
+  "viewports": [
+    {
+      "width": 1487,
+      "height": 1058,
+      "scrollWidth": 1487
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scrollWidth": 390
+    }
+  ],
+  "console": [],
+  "ids": {
+    "planning": "1ce6de83-e3ef-4187-827e-f92066f5c189",
+    "plan": "93a732fb-edcc-4c3b-bc4e-fdc067c86edb",
+    "edit": "e0e1edcb-c48e-4825-9330-a1c4c7a9cb67",
+    "task": "d8de8934-793a-4f1a-b11a-8e5c357cd94b",
+    "run": "a4af14e9-96be-4bab-a6c9-5047e7c49dbb"
+  },
+  "usage": {
+    "inputTokens": 297,
+    "outputTokens": 3214,
+    "elapsedMs": 13912,
+    "cost": null,
+    "currency": null
+  },
+  "capability": {
+    "id": "text-evidence-checklist",
+    "version": 1,
+    "visibility": "lab_public"
+  },
+  "model": "deepseek-v4-flash",
+  "harnessVersion": "0.2.0-rc.1"
+}

@@ -1,0 +1,36 @@
+# Review resource limits against the actual host before installing this unit.
+[Unit]
+Description=Research Agent Platform background worker
+Wants=network-online.target
+After=network-online.target research-agent-api.service
+StartLimitIntervalSec=60
+StartLimitBurst=5
+
+[Service]
+Type=exec
+User=research-agent
+Group=research-agent
+WorkingDirectory=/opt/research-agent-platform/current
+EnvironmentFile=/etc/research-agent-platform/platform.env
+# The file may be absent while AI is disabled. Only the worker receives the key.
+EnvironmentFile=-/etc/research-agent-platform/model.env
+ExecStart=/opt/research-agent-platform/runtime/bin/node apps/api/dist/worker.js
+Restart=on-failure
+RestartSec=5
+# Let the parent finish the bounded model call before killing the cgroup.
+KillMode=mixed
+TimeoutStopSec=150
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+StateDirectory=research-agent-platform
+StateDirectoryMode=0700
+ReadWritePaths=/var/lib/research-agent-platform
+CPUQuota=50%
+MemoryMax=384M
+TasksMax=128
+
+[Install]
+WantedBy=multi-user.target
