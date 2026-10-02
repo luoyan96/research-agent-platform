@@ -25,7 +25,7 @@ export async function register(db: DatabaseSync, input: RequestFor<'register'>, 
   return JSON.parse(String(row.response_json)) as ResponseFor<'register'>
  }
  const invitation = () => {
-  const row = db.prepare('SELECT id,lab_id FROM registration_invites WHERE code_hash=? AND revoked_at IS NULL AND expires_at>? AND used_count<max_uses').get(codeHash,new Date().toISOString())
+  const row = db.prepare('SELECT id,lab_id,bootstrap_manager FROM registration_invites WHERE code_hash=? AND revoked_at IS NULL AND expires_at>? AND used_count<max_uses').get(codeHash,new Date().toISOString())
   if (!row) fail('INVITE_UNAVAILABLE')
   if (db.prepare('SELECT 1 FROM auth_accounts WHERE username=?').get(body.username)) fail('USERNAME_TAKEN')
   return row
@@ -48,6 +48,10 @@ export async function register(db: DatabaseSync, input: RequestFor<'register'>, 
    const memberId = randomUUID(), at = new Date().toISOString()
    db.prepare('INSERT INTO members(id,lab_id,display_name,is_synthetic) VALUES (?,?,?,0)').run(memberId,invite.lab_id!,body.displayName)
    db.prepare('INSERT INTO auth_accounts VALUES (?,?,?,0)').run(memberId,body.username,encoded)
+   if(invite.bootstrap_manager===1){
+    if(db.prepare('SELECT 1 FROM lab_managers WHERE lab_id=?').get(invite.lab_id!))fail('INVITE_UNAVAILABLE')
+    db.prepare('INSERT INTO lab_managers VALUES (?,?,?,?)').run(invite.lab_id!,memberId,at,invite.id!)
+   }
    db.prepare('UPDATE registration_invites SET used_count=used_count+1 WHERE id=?').run(invite.id!)
    const result: ResponseFor<'register'> = { data: { registered:true,username:body.username } }
    db.prepare('INSERT INTO registration_receipts VALUES (?,?,?,?,?,?)').run(key,digest,invite.id!,memberId,JSON.stringify(result),at)

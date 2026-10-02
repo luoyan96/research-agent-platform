@@ -18,6 +18,7 @@ const app = document.querySelector<HTMLDivElement>('#app')!;
 const api = new ApiClient();
 const command = new CommandSlot();
 let session: ResponseFor<'session'>['data'] | undefined;
+let issuedInvite: ResponseFor<'createManagerInvite'>['data'] | undefined;
 let members: MemberModel[] = [];
 let scope = 'mine';
 let pageCursor: string | undefined;
@@ -60,6 +61,7 @@ function resetEditor() {
   dirty = false;
 }
 function clearOwnedContext() {
+  issuedInvite=undefined;
   resetEditor();
   planConclusions=[];
   coordination.clear();
@@ -87,7 +89,7 @@ function schedule(s: Schedule) {
   return `<dl class="facts"><dt>建议时间</dt><dd>${e(date(s.suggested))}</dd><dt>硬性截止</dt><dd>${e(date(s.hardDeadline))}</dd><dt>承诺时间</dt><dd>${e(date(s.committed))}</dd><dt>预计投入</dt><dd>${s.estimatedHumanHours === null ? '未约定' : e(String(s.estimatedHumanHours)) + ' 小时'}</dd><dt>检查节点</dt><dd>${e(s.checkpoint?(s.checkpoint.kind==='date'?s.checkpoint.date+' · '+s.checkpoint.timezone:s.checkpoint.at):'未约定')}</dd></dl>`;
 }
 function shell() {
-  app.innerHTML = `<button class="skip" data-skip>跳到主要内容</button><header>${link('/', '<img src="/brand.png" width="38" height="38" alt=""><span>Research Agent Platform</span>', 'brand')}<nav aria-label="主导航">${link('/', '需求入口')}${link('/lab', '实验室任务')}${session ? `<span class="session-name">${e(session.member.displayName)}</span>${button('logout','退出登录')}` : link('/login','登录')}</nav></header><main id="main" tabindex="-1"><section class="state-panel" role="status">正在从服务读取…</section></main><footer>建议需确认 · 运行需验收 · 契约 ${contractVersion}</footer>`;
+  app.innerHTML = `<button class="skip" data-skip>跳到主要内容</button><header>${link('/', '<img src="/brand.png" width="38" height="38" alt=""><span>Research Agent Platform</span>', 'brand')}<nav aria-label="主导航">${link('/', '需求入口')}${link('/lab', '实验室任务')}${session?.isLabManager ? link('/manage/invites','邀请码管理') : ''}${session ? `<span class="session-name">${e(session.member.displayName)}</span>${button('logout','退出登录')}` : link('/login','登录')}</nav></header><main id="main" tabindex="-1"><section class="state-panel" role="status">正在从服务读取…</section></main><footer>建议需确认 · 运行需验收 · 契约 ${contractVersion}</footer>`;
   document.querySelector<HTMLButtonElement>('[data-skip]')!.onclick = () => document.querySelector<HTMLElement>('main')!.focus();
   action('logout', async () => {
     await api.call('logout', {params:{},query:{},headers:{},body:{}});
@@ -103,7 +105,7 @@ function content(html: string, title: string) {
 }
 function feedback(error: unknown) {
   const err = error instanceof ApiError ? error : new ApiError('ERROR', '操作未完成，请重试。');
-  if(err.code==='UNAUTHENTICATED'){controller?.abort();session=undefined;api.csrfToken='';members=[];activeSnapshot=undefined;resetPages();shell();login();}
+  if(err.code==='UNAUTHENTICATED'){controller?.abort();session=undefined;issuedInvite=undefined;api.csrfToken='';members=[];activeSnapshot=undefined;resetPages();shell();login();}
   if(['FORBIDDEN','NOT_FOUND'].includes(err.code)) {controller?.abort();reuse.clear();if(route().startsWith('/tasks/'))coordination.reset(route().slice(7));if(route().startsWith('/plans/'))resetEditor();for(const key of drafts.keys())if(key.startsWith(route()+':'))drafts.delete(key);command.discard();retryCommand=undefined;members=[];activeSnapshot=undefined;resetPages();content('<section class="state-panel"><h1>无法访问此内容</h1><p>资源不存在或当前账号无权访问。旧内容已清除。</p></section>','无法访问');}
   const target = document.querySelector('#feedback') ?? document.querySelector('main')!;
   const conflict = ['VERSION_CONFLICT','IDEMPOTENCY_CONFLICT','ALREADY_CLAIMED','INVALID_STATE'].includes(err.code);
@@ -163,6 +165,25 @@ function login() {
       location.hash = '/'; await load();
     } finally {busy = false;}
   }, false);
+}
+async function inviteManagement(signal:AbortSignal) {
+  if(!session?.isLabManager){content('<section class="state-panel"><h1>无法访问此内容</h1><p>当前账号不是实验室管理员。</p></section>','无法访问');return;}
+  const response=await api.read('managerInvites',{id:session.member.labId},{},signal);
+  if(signal.aborted)return;
+  const rows=response.data.invites.map(item=>{
+    const state=item.revokedAt?'已撤销':item.usedCount>=item.maxUses?'已用完':Date.parse(item.expiresAt)<=Date.now()?'已过期':'可使用';
+    return `<tr><td><code>${e(item.id)}</code></td><td>${e(state)}</td><td>${item.usedCount}/${item.maxUses}</td><td><time datetime="${e(item.expiresAt)}">${e(new Date(item.expiresAt).toLocaleString())}</time></td><td>${state==='可使用'?`<button type="button" data-revoke-invite="${e(item.id)}">撤销</button>`:''}</td></tr>`;
+  }).join('');
+  content(`<section class="page"><div class="page-heading"><div><p class="eyebrow">实验室管理</p><h1>邀请码管理</h1><p class="intro">创建邀请码交给成员，他们自行设置账号和密码。</p></div></div>${issuedInvite?`<section class="panel" role="status"><h2>新邀请码已创建</h2><p>复制并妥善交给受邀成员。离开此页后不再显示原码。</p><label>邀请码<input readonly value="${e(issuedInvite.code)}" data-issued-code></label><button type="button" data-action="copy-invite">复制邀请码</button><p>有效期至 ${e(new Date(issuedInvite.invite.expiresAt).toLocaleString())}，最多 ${issuedInvite.invite.maxUses} 人使用。</p></section>`:''}<form data-form="create-invite" class="panel"><h2>创建邀请码</h2><label>有效天数<select name="days"><option value="1">1 天</option><option value="7" selected>7 天</option><option value="14">14 天</option><option value="29">29 天</option></select></label><label>可注册人数<input name="maxUses" type="number" min="1" max="50" value="10" required></label><button class="primary" type="submit">创建邀请码</button></form><section class="panel"><h2>已签发的邀请码</h2>${response.data.truncated?'<p>仅显示最近 50 枚邀请码。</p>':''}<div class="table-wrap"><table><thead><tr><th>编号</th><th>状态</th><th>已用/名额</th><th>到期时间</th><th>操作</th></tr></thead><tbody>${rows||'<tr><td colspan="5">尚无邀请码</td></tr>'}</tbody></table></div><p class="fine">历史邀请码原码不会在列表中显示；到期或用完后可创建新的。</p></section></section>`,'邀请码管理');
+  action('copy-invite',()=>navigator.clipboard.writeText(issuedInvite!.code));
+  form('create-invite',async data=>{
+    const days=Number(data.get('days')),maxUses=Number(data.get('maxUses'));
+    await mutate(new Intent('createManagerInvite',{expiresAt:new Date(Date.now()+days*86400000).toISOString(),maxUses},{id:session!.member.labId}),async value=>{issuedInvite=value.data;await inviteManagement(signal);});
+  },false);
+  document.querySelectorAll<HTMLButtonElement>('[data-revoke-invite]').forEach(el=>el.onclick=()=>{
+    const inviteId=el.dataset.revokeInvite!;
+    void mutate(new Intent('revokeManagerInvite',{}, {id:session!.member.labId,inviteId}),async()=>{if(issuedInvite?.invite.id===inviteId)issuedInvite=undefined;await inviteManagement(signal);});
+  });
 }
 function selectedConclusions(root:ParentNode=document):NonNullable<RequestFor<'planRequest'>['body']['conclusionRefs']>{return [...root.querySelectorAll<HTMLInputElement>('[data-conclusion-ref]:checked:not(:disabled)')].map(el=>({id:el.dataset.conclusionRef!,version:Number(el.dataset.version)}));}
 async function selectableConclusions(signal:AbortSignal){
@@ -397,6 +418,7 @@ function availabilityEditor() {
 
 async function load() {
   controller?.abort();controller=new AbortController();const signal=controller.signal;const path=route();activeSnapshot=undefined;shell();
+  if(path!=='/manage/invites')issuedInvite=undefined;
   try {
     if(path==='/login'){login();return;}
     if(path==='/register'){content(registrationPage,'注册账号');bindRegistration(app,api,signal);return;}
@@ -416,6 +438,7 @@ async function load() {
     if(signal.aborted)return;shell();
     if(path==='/')await dailyEntry(signal);
     else if(path==='/lab')await taskList(signal);
+    else if(path==='/manage/invites')await inviteManagement(signal);
     else if(path==='/plans'||path.startsWith('/plans?'))await planList(signal);
     else if(path==='/actions')await actionList(signal);
     else if(path==='/methods')await methodsPage(signal);
@@ -438,14 +461,14 @@ async function load() {
     } else content(`<section class="state-panel"><h1>页面不存在</h1>${link('/','回到入口')}</section>`,'页面不存在');
   }catch(error){
     if(signal.aborted)return;
-    if(error instanceof ApiError&&error.code==='UNAUTHENTICATED'){session=undefined;api.csrfToken='';members=[];shell();login();if(path!=='/'||draftOwner)feedback(error);}
+    if(error instanceof ApiError&&error.code==='UNAUTHENTICATED'){session=undefined;issuedInvite=undefined;api.csrfToken='';members=[];shell();login();if(path!=='/'||draftOwner)feedback(error);}
     else {members=[];activeSnapshot=undefined;content('<section class="state-panel"><h1>暂时无法读取</h1><p>旧的受限内容已清除，没有使用演示数据替代服务响应。尚未提交的输入仍保留。</p></section>','读取失败');feedback(error);}
   }
 }
 window.addEventListener('hashchange',()=>{sampleCursor=undefined;pageCursor=undefined;planCursor=undefined;actionCursor=undefined;void load();});
 window.addEventListener('offline',()=>{
   if(!session)return;
-  controller?.abort();members=[];activeSnapshot=undefined;resetPages();
+  controller?.abort();issuedInvite=undefined;members=[];activeSnapshot=undefined;resetPages();
   content('<section class="state-panel"><h1>连接已断开</h1><p>旧的受限内容已清除；输入与未决请求保留。恢复连接后请重新读取。</p></section>','连接断开');
   feedback(new ApiError('NETWORK_ERROR','尚未与服务同步，请恢复连接后重试。'));
 });

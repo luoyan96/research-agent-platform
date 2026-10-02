@@ -316,7 +316,7 @@ describe('B4a A14a–f: actual HTTP processes, durable DB and explicit determini
    for(const saved of documents){const prior=JSON.parse(String(saved.document)),after=JSON.parse(String(legacy.prepare('SELECT document FROM execution_jobs WHERE id=?').get(saved.id!)!.document));for(const field of ['methodVersion','configurationGeneration','methodTrial','conclusionRefs'])delete after[field];expect(after).toEqual(prior)}
    expect(String(legacy.prepare("SELECT version FROM public_capabilities WHERE lab_id='lab_synthetic'").get()!.version)).toBe(before)
    expect(legacy.prepare('SELECT id,kind,status,version,request_json FROM execution_jobs ORDER BY id').all()).toEqual(jobs)
-   expect(legacy.prepare('SELECT count(*) n FROM schema_migrations').get()!.n).toBe(9)
+   expect(legacy.prepare('SELECT count(*) n FROM schema_migrations').get()!.n).toBe(10)
    expect(legacy.prepare('SELECT action,generation FROM method_events').all()).toEqual([{action:'legacy_import',generation:Number(before)}])
    const origin=JSON.parse(String(legacy.prepare('SELECT document FROM public_methods WHERE version=1').get()!.document));expect(origin.origin).toBe('legacy_b3');expect(origin.createdBy).toBeNull()
    expect(legacy.prepare("SELECT count(*) n FROM execution_jobs WHERE kind='capability' AND json_extract(document,'$.methodVersion')=1").get()!.n).toBeGreaterThan(0)

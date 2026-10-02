@@ -3,6 +3,7 @@ import * as m from './models.js'
 
 const empty = z.strictObject({})
 const id = z.strictObject({ id: m.Id })
+const inviteId = z.strictObject({ id: m.Id, inviteId: m.Id })
 const version = z.strictObject({ expectedVersion: m.Version })
 const reason = version.extend({ reason: m.Text })
 const snapshotQuery = z.strictObject({ snapshot: z.string().min(1).max(2048).optional() })
@@ -23,8 +24,11 @@ export const routes = {
   ready: route('GET', '/health/ready', 'B0', empty, empty, z.null(), m.data(m.Health), 200, '503 with same health schema if database migration/write probe or blob read/write probe fails.', 'public'),
   login: route('POST', '/auth/login', 'B1', empty, empty, z.strictObject({ username: z.string().min(1).max(100), password: z.string().min(12).max(256) }), m.data(m.Member), 200, 'Verify provisioned password hash; rotate session; issue HttpOnly cookie. Invitation registration is a separate endpoint.', 'public', false),
   register: route('POST', '/auth/register', 'B5b', empty, empty, z.strictObject({ inviteCode:z.string().min(20).max(128).regex(/^[A-Za-z0-9_-]+$/), username:z.string().min(1).max(100).regex(/^[A-Za-z0-9_-]+$/), displayName:z.string().trim().min(1).max(200), password:z.string().min(16).max(256) }), m.data(z.strictObject({registered:z.literal(true),username:z.string().min(1).max(100)})), 201, 'Same-origin invitation-only account creation. No client lab/role/member ID; valid non-revoked invitation required. Account, membership, use count and retry receipt are atomic. No session issued; sign in afterwards. Never persists raw code or password.', 'public'),
-  session: route('GET', '/auth/session', 'B1', empty, empty, z.null(), m.data(z.strictObject({ member: m.Member, csrfToken: m.Id, expiresAt: m.Instant })), 200, 'Session DB lookup; expiry and revocation checked.'),
+  session: route('GET', '/auth/session', 'B1', empty, empty, z.null(), m.data(z.strictObject({ member: m.Member, csrfToken: m.Id, expiresAt: m.Instant, isLabManager: z.boolean() })), 200, 'Session DB lookup; expiry and revocation checked; manager flag is server-authoritative.'),
   logout: route('POST', '/auth/logout', 'B1', empty, empty, empty, m.data(z.strictObject({ loggedOut: z.literal(true) })), 200, 'Revoke current session and clear cookie; Origin and CSRF required.', 'session', false),
+  managerInvites: route('GET', '/labs/{id}/registration-invites', 'B5b', id, empty, z.null(), m.data(z.strictObject({ invites:z.array(m.RegistrationInvite).max(50), truncated:z.boolean() })), 200, 'Current lab manager only; metadata for 50 latest invites, never raw codes or hashes.'),
+  createManagerInvite: route('POST', '/labs/{id}/registration-invites', 'B5b', id, empty, z.strictObject({ expiresAt:m.Instant, maxUses:z.number().int().min(1).max(50) }), m.data(z.strictObject({ invite:m.RegistrationInvite, code:z.string().min(20).max(128) })), 201, 'Current lab manager only; code returned on creation or exact idempotent retry, never stored raw. CSRF and same-Origin required.'),
+  revokeManagerInvite: route('POST', '/labs/{id}/registration-invites/{inviteId}/revoke', 'B5b', inviteId, empty, empty, m.data(m.RegistrationInvite), 200, 'Current lab manager only; revoke same-lab invite idempotently. CSRF and same-Origin required.'),
   me: route('GET', '/me', 'B1', empty, snapshotQuery, z.null(), m.data(m.Member).extend(snap), 200, 'Current authenticated member.'),
   members: route('GET', '/labs/{id}/members', 'B1', id, pagination, z.null(), m.page(m.Member).extend(snap), 200, 'Lab membership; only public profile and visible commitments.'),
   availability: route('PATCH', '/me/availability', 'B2a', empty, empty, version.extend({ availability: m.Availability.nullable() }), m.data(m.Member), 200, 'Self; transaction checks member version, server replaces updatedAt.'),

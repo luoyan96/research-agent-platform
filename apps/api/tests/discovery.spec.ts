@@ -329,7 +329,7 @@ describe('B2a A9a: real HTTP and persistent SQLite discovery', () => {
       const before = tables.map(t => JSON.stringify(legacy.prepare(`SELECT * FROM ${t} ORDER BY rowid`).all()))
       migrate(legacy); migrate(legacy)
       expect(tables.map(t => JSON.stringify(legacy.prepare(`SELECT * FROM ${t} ORDER BY rowid`).all()))).toEqual(before)
-      expect(legacy.prepare('SELECT count(*) n FROM schema_migrations').get()!.n).toBe(9)
+      expect(legacy.prepare('SELECT count(*) n FROM schema_migrations').get()!.n).toBe(10)
       expect(legacy.prepare('SELECT count(*) n FROM member_availability').get()!.n).toBe(0)
       expect(legacy.prepare('SELECT applied_at FROM schema_migrations WHERE version=3').get()!.applied_at).toBe('2026-09-21T00:00:00Z')
     } finally { legacy.close() }

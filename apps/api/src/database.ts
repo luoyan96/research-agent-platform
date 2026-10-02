@@ -3,7 +3,7 @@ import { readFileSync, mkdirSync, existsSync } from 'node:fs'
 import { dirname } from 'node:path'
 import { createHash, randomBytes } from 'node:crypto'
 
-const migrations = ['001-foundation.sql', '002-collaboration.sql', '003-invitation-decisions.sql', '004-discovery.sql', '005-coordination.sql', '006-execution.sql', '007-authorized-reuse.sql', '008-pilot-operations.sql', '009-invite-registration.sql'].map((name, index) => {
+const migrations = ['001-foundation.sql', '002-collaboration.sql', '003-invitation-decisions.sql', '004-discovery.sql', '005-coordination.sql', '006-execution.sql', '007-authorized-reuse.sql', '008-pilot-operations.sql', '009-invite-registration.sql', '010-lab-invite-management.sql'].map((name, index) => {
   const sql = readFileSync(new URL(`../migrations/${name}`, import.meta.url), 'utf8')
   return { version: index + 1, sql, checksum: createHash('sha256').update(sql).digest('hex') }
 })

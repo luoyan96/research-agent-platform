@@ -278,7 +278,7 @@ describe('B3 durable service with explicit deterministic model doubles (not G3 l
       const before=tables.map(t=>JSON.stringify(legacy.prepare(`SELECT * FROM ${t} ORDER BY rowid`).all()))
       migrate(legacy);migrate(legacy)
       expect(tables.map(t=>JSON.stringify(legacy.prepare(`SELECT * FROM ${t} ORDER BY rowid`).all()))).toEqual(before)
-      expect(legacy.prepare('SELECT count(*) n FROM schema_migrations').get()!.n).toBe(9)
+      expect(legacy.prepare('SELECT count(*) n FROM schema_migrations').get()!.n).toBe(10)
       const original=databasePath;databasePath=legacyPath;let upgraded:Awaited<ReturnType<typeof startServer>>
       try{upgraded=await startServer()}finally{databasePath=original}
       const read=await request('task',{client:clients.A,params:{id},target:upgraded.url});expect(read.status).toBe(200);expect(read.value.data).toEqual(expected)

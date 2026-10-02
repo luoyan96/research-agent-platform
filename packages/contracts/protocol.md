@@ -1,4 +1,4 @@
-# HTTP 协议 0.7.0
+# HTTP 协议 0.8.0
 
 完整精确接口见 [OpenAPI](openapi.json)，所有接口的合成请求响应见 [examples](examples.json)。已实现 routes 中 stage=B0/B1/B2a/B2b/B3/B4a 的端点；B4 仍为501。B3 模型功能需显式服务端配置，关闭时 draft/auto 返回503 MODEL_UNAVAILABLE；授权 progress/find_work 使用服务事实。固定 Harness 与真实验证见 B3 联调包，不返回 fixture 成功。
 
@@ -9,6 +9,8 @@
 注册请求（B5b）必须有同源 Origin 与 Idempotency-Key，只接收 inviteCode、username、displayName、password。密码 16–256 字符；邀请码先验证再检查重名，不公开实验室列表。无效/过期/撤销/满额统一 INVITE_UNAVAILABLE，有效邀请下重名为 USERNAME_TAKEN。数据库只存邀请码 SHA-256、scrypt 密码及签名密钥 HMAC 的重试摘要；账号、成员、名额和成功回执在一次事务提交。密码派生后再次检查邀请码，避免撤销或并发最后名额绕过。成功不签发会话，用户随后正常登录；重复请求不会重置密码或启用已停用账号。
 
 注册按实际连接 IP 持久计数，每 15 分钟至多 20 次；反向代理场景按代理 IP 合并，不信任客户端转发头。最多两个跨进程密码派生工作位，工作位 60 秒失效以便崩溃后恢复。注册正文上限 8192 字节。恢复备份时撤销全部邀请码并清空工作位，防止旧备份重新开放入口。详见[邀请码维护](../../docs/deployment/registration.md)。
+
+管理员开通码由维护者仅对空实验室指定，且必须是未使用的单次邀请码。该码注册者在同一事务中成为 `lab_managers` 记录中的管理员。GET /auth/session 返回 `isLabManager`，但管理 API 始终重新检查会话与服务端管理员记录。管理员可用 GET/POST /labs/{id}/registration-invites 查看最近 50 枚邀请码的元数据或创建新码，并用 POST /labs/{id}/registration-invites/{inviteId}/revoke 撤销；普通成员无权调用。创建码由服务端签名密钥和幂等键导出高熵原码，仅原请求重试可重现，数据库只保存哈希；列表从不返回原码。创建与撤销要求精确 Origin、会话、CSRF 和同实验室管理员身份。
 
 成功签发随机 32 字节不透明 session token，DB 仅存 SHA-256 hash，Cookie 名 rap_session；HttpOnly、Secure（生产强制 HTTPS）、SameSite=Lax、Path=/、无 Domain；绝对 12 小时到期，无无限滑动延期，登录撤销当前 cookie 的旧会话并轮换，登出数据库撤销并 Max-Age=0。会话失效和禁用账号返回 UNAUTHENTICATED。GET /auth/session 返回 member、expiresAt、CSRF token（用持久随机签名密钥 HMAC 派生，数据库只存其 hash）；客户端不能用 Member 或 labId 作为身份断言。每账号 10 次/15分钟、每来源 IP 40 次/15分钟的登录尝试在 SQLite 中累计，跨进程和重启仍生效，失败与成功都计数；429 带 Retry-After:900。
 

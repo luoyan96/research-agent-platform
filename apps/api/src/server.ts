@@ -17,6 +17,7 @@ import type { RequestFor } from '@research-agent-platform/contracts'
 import { cleanBlobs } from './coordination.js'
 import { ApiError, fail } from './errors.js'
 import { register } from './registration.js'
+import { isLabManager, managerInvites, createManagerInvite, revokeManagerInvite } from './invite-management.js'
 
 export function createServer(config: Config) {
   const app = Fastify({ logger: false, bodyLimit: 1048576, genReqId: () => randomUUID(), requestTimeout: 10000 })
@@ -52,7 +53,7 @@ export function createServer(config: Config) {
   })
   for (const [name, route] of Object.entries(routes)) {
     if (route.stage === 'B0') continue
-    app.route({ method: route.method, url: route.path.replace(/\{id\}/g, ':id'), ...(name==='upload'?{bodyLimit:14000000}:name==='register'?{bodyLimit:8192}:{}), handler: async (request, reply) => {
+    app.route({ method: route.method, url: route.path.replace(/\{(\w+)\}/g, ':$1'), ...(name==='upload'?{bodyLimit:14000000}:name==='register'?{bodyLimit:8192}:{}), handler: async (request, reply) => {
       if (!route.implemented && name !== 'planRequest') fail('NOT_IMPLEMENTED')
       if (route.method !== 'GET' && request.headers.origin !== config.origin) fail('FORBIDDEN')
       const connection = database()
@@ -79,11 +80,14 @@ export function createServer(config: Config) {
       try { return transaction(connection, () => {
         const actor = authenticate(connection, token)
         if (route.method !== 'GET') requireCsrf(actor, request.headers['x-csrf-token'])
-        if (name === 'session') return routes.session.response.parse({ data: { member: new Collaboration(connection, actor).member(actor.id), csrfToken: csrfToken(connection, token), expiresAt: actor.expiresAt } })
+        if (name === 'session') return routes.session.response.parse({ data: { member: new Collaboration(connection, actor).member(actor.id), csrfToken: csrfToken(connection, token), expiresAt: actor.expiresAt, isLabManager:isLabManager(connection,actor) } })
         if (name === 'logout') {
           connection.prepare('UPDATE sessions SET revoked_at=? WHERE token_hash=?').run(new Date().toISOString(), hash(token))
           reply.header('Set-Cookie', cookie('', 0)); return { data: { loggedOut: true } }
         }
+        if (name === 'managerInvites') return routes.managerInvites.response.parse(managerInvites(connection,actor,parsed.data as RequestFor<'managerInvites'>))
+        if (name === 'createManagerInvite') return routes.createManagerInvite.response.parse(createManagerInvite(connection,actor,parsed.data as RequestFor<'createManagerInvite'>))
+        if (name === 'revokeManagerInvite') return routes.revokeManagerInvite.response.parse(revokeManagerInvite(connection,actor,parsed.data as RequestFor<'revokeManagerInvite'>))
         collaboration = new Collaboration(connection,actor,config.blobRoot,{enabled:config.aiEnabled,model:config.model})
         reconcile(connection,config)
         if((reuseCommands as readonly string[]).includes(name)){const result=new ReuseService(collaboration).run(name as ReuseCommand,parsed.data as RequestFor<ReuseCommand>);reconcile(connection,config);return result}

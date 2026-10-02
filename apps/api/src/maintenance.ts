@@ -13,6 +13,8 @@ export const MaintenanceCommand = z.discriminatedUnion('action', [
  z.object({ ...base, action: z.literal('create-registration-invite'), inviteId:id, codeHash:z.string().regex(/^[a-f0-9]{64}$/), expiresAt:z.iso.datetime({offset:true}), maxUses:z.number().int().min(1).max(50) }).strict(),
  z.object({ ...base, action: z.literal('revoke-registration-invite'), inviteId:id }).strict(),
  z.object({ ...base, action: z.literal('inspect-registration-invite'), inviteId:id }).strict(),
+ z.object({ ...base, action: z.literal('designate-manager-invite'), inviteId:id }).strict(),
+ z.object({ ...base, action: z.literal('assign-lab-manager'), memberId:id }).strict(),
  z.object({ ...base, action: z.literal('create-account'), memberId: id, username: id, displayName: z.string().min(1).max(200), password: z.string().min(16).max(256) }).strict(),
  z.object({ ...base, action: z.literal('reset-password'), memberId: id, expectedVersion: z.number().int().positive(), password: z.string().min(16).max(256) }).strict(),
  z.object({ ...base, action: z.literal('disable-account'), memberId: id, expectedVersion: z.number().int().positive() }).strict(),
@@ -42,7 +44,16 @@ export async function maintain(db: DatabaseSync, config: Config, operator: strin
    db.prepare('INSERT INTO labs VALUES(?,?)').run(command.labId,command.name)
   } else {
    if (!db.prepare('SELECT 1 FROM labs WHERE id=?').get(command.labId)) throw new Error('LAB_NOT_FOUND')
-   if (command.action === 'create-registration-invite') {
+   if (command.action === 'designate-manager-invite') {
+    const invite=db.prepare('SELECT max_uses,used_count,revoked_at,expires_at FROM registration_invites WHERE id=? AND lab_id=?').get(command.inviteId,command.labId)
+    if(!invite || invite.max_uses!==1 || invite.used_count!==0 || invite.revoked_at!==null || Date.parse(String(invite.expires_at))<=Date.now())throw new Error('INVITE_NOT_ELIGIBLE')
+    if(db.prepare('SELECT 1 FROM lab_managers WHERE lab_id=?').get(command.labId) || db.prepare('SELECT 1 FROM members WHERE lab_id=?').get(command.labId))throw new Error('LAB_NOT_EMPTY')
+    db.prepare('UPDATE registration_invites SET bootstrap_manager=1 WHERE id=? AND lab_id=?').run(command.inviteId,command.labId)
+   } else if (command.action === 'assign-lab-manager') {
+    const member=db.prepare('SELECT 1 FROM members m JOIN auth_accounts a ON a.member_id=m.id WHERE m.id=? AND m.lab_id=? AND a.disabled=0').get(command.memberId,command.labId)
+    if(!member)throw new Error('ACCOUNT_NOT_FOUND')
+    db.prepare('INSERT INTO lab_managers(lab_id,member_id,granted_at,bootstrap_invite_id) VALUES(?,?,?,NULL) ON CONFLICT(lab_id) DO UPDATE SET member_id=excluded.member_id,granted_at=excluded.granted_at,bootstrap_invite_id=NULL').run(command.labId,command.memberId,new Date().toISOString())
+   } else if (command.action === 'create-registration-invite') {
     const expiry=Date.parse(command.expiresAt)
     if(expiry<=Date.now() || expiry>Date.now()+30*86400000)throw new Error('INVITE_EXPIRY_INVALID')
     if(db.prepare('SELECT 1 FROM registration_invites WHERE id=? OR code_hash=?').get(command.inviteId,command.codeHash))throw new Error('INVITE_EXISTS')

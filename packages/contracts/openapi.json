@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Research Agent Platform B0 contract",
-    "version": "0.7.0"
+    "version": "0.8.0"
   },
   "paths": {
     "/api/v1/health/live": {
@@ -34,7 +34,7 @@
                         },
                         "contractVersion": {
                           "type": "string",
-                          "const": "0.7.0"
+                          "const": "0.8.0"
                         },
                         "checks": {
                           "type": "object",
@@ -93,7 +93,7 @@
                 "example": {
                   "data": {
                     "status": "ok",
-                    "contractVersion": "0.7.0",
+                    "contractVersion": "0.8.0",
                     "checks": {
                       "database": "ok",
                       "storage": "ok",
@@ -247,7 +247,7 @@
                         },
                         "contractVersion": {
                           "type": "string",
-                          "const": "0.7.0"
+                          "const": "0.8.0"
                         },
                         "checks": {
                           "type": "object",
@@ -306,7 +306,7 @@
                 "example": {
                   "data": {
                     "status": "ok",
-                    "contractVersion": "0.7.0",
+                    "contractVersion": "0.8.0",
                     "checks": {
                       "database": "ok",
                       "storage": "ok",
@@ -438,7 +438,7 @@
                         },
                         "contractVersion": {
                           "type": "string",
-                          "const": "0.7.0"
+                          "const": "0.8.0"
                         },
                         "checks": {
                           "type": "object",
@@ -497,7 +497,7 @@
                 "example": {
                   "data": {
                     "status": "ok",
-                    "contractVersion": "0.7.0",
+                    "contractVersion": "0.8.0",
                     "checks": {
                       "database": "ok",
                       "storage": "ok",
@@ -1370,7 +1370,7 @@
     "/api/v1/auth/session": {
       "get": {
         "operationId": "session",
-        "description": "Session DB lookup; expiry and revocation checked.",
+        "description": "Session DB lookup; expiry and revocation checked; manager flag is server-authoritative.",
         "x-stage": "B1",
         "x-implemented": true,
         "security": [
@@ -1852,12 +1852,16 @@
                           "type": "string",
                           "format": "date-time",
                           "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+                        },
+                        "isLabManager": {
+                          "type": "boolean"
                         }
                       },
                       "required": [
                         "member",
                         "csrfToken",
-                        "expiresAt"
+                        "expiresAt",
+                        "isLabManager"
                       ],
                       "additionalProperties": false
                     }
@@ -1879,7 +1883,8 @@
                       "version": 1
                     },
                     "csrfToken": "synthetic",
-                    "expiresAt": "2026-09-21T08:00:00+08:00"
+                    "expiresAt": "2026-09-21T08:00:00+08:00",
+                    "isLabManager": false
                   }
                 }
               }
@@ -2065,6 +2070,820 @@
                 "example": {
                   "data": {
                     "loggedOut": true
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "See error.code mapping and retry rules in protocol.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "See error.code mapping and retry rules in protocol.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "See error.code mapping and retry rules in protocol.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "See error.code mapping and retry rules in protocol.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "See error.code mapping and retry rules in protocol.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "See error.code mapping and retry rules in protocol.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "See error.code mapping and retry rules in protocol.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "See error.code mapping and retry rules in protocol.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "See error.code mapping and retry rules in protocol.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "501": {
+            "description": "See error.code mapping and retry rules in protocol.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "See error.code mapping and retry rules in protocol.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/labs/{id}/registration-invites": {
+      "get": {
+        "operationId": "managerInvites",
+        "description": "Current lab manager only; metadata for 50 latest invites, never raw codes or hashes.",
+        "x-stage": "B5b",
+        "x-implemented": true,
+        "security": [
+          {
+            "sessionCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9_-]{1,96}$"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "B5b contract; implemented",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$schema": "https://json-schema.org/draft/2020-12/schema",
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "invites": {
+                          "maxItems": 50,
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string",
+                                "pattern": "^[A-Za-z0-9_-]{1,96}$"
+                              },
+                              "labId": {
+                                "type": "string",
+                                "pattern": "^[A-Za-z0-9_-]{1,96}$"
+                              },
+                              "expiresAt": {
+                                "type": "string",
+                                "format": "date-time",
+                                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+                              },
+                              "maxUses": {
+                                "type": "integer",
+                                "minimum": 1,
+                                "maximum": 50
+                              },
+                              "usedCount": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 9007199254740991
+                              },
+                              "createdAt": {
+                                "type": "string",
+                                "format": "date-time",
+                                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+                              },
+                              "revokedAt": {
+                                "anyOf": [
+                                  {
+                                    "type": "string",
+                                    "format": "date-time",
+                                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
+                              },
+                              "createdBy": {
+                                "anyOf": [
+                                  {
+                                    "type": "string",
+                                    "pattern": "^[A-Za-z0-9_-]{1,96}$"
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "labId",
+                              "expiresAt",
+                              "maxUses",
+                              "usedCount",
+                              "createdAt",
+                              "revokedAt",
+                              "createdBy"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "truncated": {
+                          "type": "boolean"
+                        }
+                      },
+                      "required": [
+                        "invites",
+                        "truncated"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ],
+                  "additionalProperties": false
+                },
+                "example": {
+                  "data": {
+                    "invites": [],
+                    "truncated": false
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "See error.code mapping and retry rules in protocol.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "See error.code mapping and retry rules in protocol.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "See error.code mapping and retry rules in protocol.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "See error.code mapping and retry rules in protocol.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "See error.code mapping and retry rules in protocol.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "See error.code mapping and retry rules in protocol.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "See error.code mapping and retry rules in protocol.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "See error.code mapping and retry rules in protocol.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "See error.code mapping and retry rules in protocol.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "501": {
+            "description": "See error.code mapping and retry rules in protocol.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "See error.code mapping and retry rules in protocol.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "createManagerInvite",
+        "description": "Current lab manager only; code returned on creation or exact idempotent retry, never stored raw. CSRF and same-Origin required.",
+        "x-stage": "B5b",
+        "x-implemented": true,
+        "security": [
+          {
+            "sessionCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9_-]{1,96}$"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9_-]{16,128}$"
+            }
+          },
+          {
+            "name": "X-CSRF-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 32,
+              "maxLength": 128
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "expiresAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+                  },
+                  "maxUses": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 50
+                  }
+                },
+                "required": [
+                  "expiresAt",
+                  "maxUses"
+                ],
+                "additionalProperties": false
+              },
+              "example": {
+                "expiresAt": "2026-09-21T08:00:00+08:00",
+                "maxUses": 1
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "B5b contract; implemented",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$schema": "https://json-schema.org/draft/2020-12/schema",
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "invite": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "pattern": "^[A-Za-z0-9_-]{1,96}$"
+                            },
+                            "labId": {
+                              "type": "string",
+                              "pattern": "^[A-Za-z0-9_-]{1,96}$"
+                            },
+                            "expiresAt": {
+                              "type": "string",
+                              "format": "date-time",
+                              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+                            },
+                            "maxUses": {
+                              "type": "integer",
+                              "minimum": 1,
+                              "maximum": 50
+                            },
+                            "usedCount": {
+                              "type": "integer",
+                              "minimum": 0,
+                              "maximum": 9007199254740991
+                            },
+                            "createdAt": {
+                              "type": "string",
+                              "format": "date-time",
+                              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+                            },
+                            "revokedAt": {
+                              "anyOf": [
+                                {
+                                  "type": "string",
+                                  "format": "date-time",
+                                  "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            },
+                            "createdBy": {
+                              "anyOf": [
+                                {
+                                  "type": "string",
+                                  "pattern": "^[A-Za-z0-9_-]{1,96}$"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "labId",
+                            "expiresAt",
+                            "maxUses",
+                            "usedCount",
+                            "createdAt",
+                            "revokedAt",
+                            "createdBy"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "code": {
+                          "type": "string",
+                          "minLength": 20,
+                          "maxLength": 128
+                        }
+                      },
+                      "required": [
+                        "invite",
+                        "code"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ],
+                  "additionalProperties": false
+                },
+                "example": {
+                  "data": {
+                    "invite": {
+                      "id": "synthetic",
+                      "labId": "synthetic",
+                      "expiresAt": "2026-09-21T08:00:00+08:00",
+                      "maxUses": 1,
+                      "usedCount": 0,
+                      "createdAt": "2026-09-21T08:00:00+08:00",
+                      "revokedAt": null,
+                      "createdBy": null
+                    },
+                    "code": "syntheticxxxxxxxxxxx"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "See error.code mapping and retry rules in protocol.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "See error.code mapping and retry rules in protocol.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "See error.code mapping and retry rules in protocol.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "See error.code mapping and retry rules in protocol.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "See error.code mapping and retry rules in protocol.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "See error.code mapping and retry rules in protocol.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "See error.code mapping and retry rules in protocol.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "See error.code mapping and retry rules in protocol.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "See error.code mapping and retry rules in protocol.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "501": {
+            "description": "See error.code mapping and retry rules in protocol.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "See error.code mapping and retry rules in protocol.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/labs/{id}/registration-invites/{inviteId}/revoke": {
+      "post": {
+        "operationId": "revokeManagerInvite",
+        "description": "Current lab manager only; revoke same-lab invite idempotently. CSRF and same-Origin required.",
+        "x-stage": "B5b",
+        "x-implemented": true,
+        "security": [
+          {
+            "sessionCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9_-]{1,96}$"
+            }
+          },
+          {
+            "name": "inviteId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9_-]{1,96}$"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9_-]{16,128}$"
+            }
+          },
+          {
+            "name": "X-CSRF-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 32,
+              "maxLength": 128
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {},
+                "additionalProperties": false
+              },
+              "example": {}
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "B5b contract; implemented",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$schema": "https://json-schema.org/draft/2020-12/schema",
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "pattern": "^[A-Za-z0-9_-]{1,96}$"
+                        },
+                        "labId": {
+                          "type": "string",
+                          "pattern": "^[A-Za-z0-9_-]{1,96}$"
+                        },
+                        "expiresAt": {
+                          "type": "string",
+                          "format": "date-time",
+                          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+                        },
+                        "maxUses": {
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 50
+                        },
+                        "usedCount": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 9007199254740991
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time",
+                          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+                        },
+                        "revokedAt": {
+                          "anyOf": [
+                            {
+                              "type": "string",
+                              "format": "date-time",
+                              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "createdBy": {
+                          "anyOf": [
+                            {
+                              "type": "string",
+                              "pattern": "^[A-Za-z0-9_-]{1,96}$"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "labId",
+                        "expiresAt",
+                        "maxUses",
+                        "usedCount",
+                        "createdAt",
+                        "revokedAt",
+                        "createdBy"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ],
+                  "additionalProperties": false
+                },
+                "example": {
+                  "data": {
+                    "id": "synthetic",
+                    "labId": "synthetic",
+                    "expiresAt": "2026-09-21T08:00:00+08:00",
+                    "maxUses": 1,
+                    "usedCount": 0,
+                    "createdAt": "2026-09-21T08:00:00+08:00",
+                    "revokedAt": null,
+                    "createdBy": null
                   }
                 }
               }
