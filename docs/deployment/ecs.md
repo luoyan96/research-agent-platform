@@ -1,12 +1,28 @@
 # 将科研平台部署到已有 ECS
 
-最新核查：2026-10-03。ECS 当前应用发布代码提交 `a0980c423f0a2125cfd152104df795b0b13f3f7d`，契约 0.8.0、迁移 010、Harness 0.2.0-rc.1。实验室负责人网页自助管理邀请码已上线并通过合成 HTTPS 验收；AI 尚未启用，真实小组试用待完成，G5b/P1 未通过。首次部署使用的提交 `69e52053d5850a195db38db9cde6832b13c91576`、契约 0.6.2 和迁移 008 保留在下文作为历史基线。
+最新核查：2026-10-03。ECS 当前应用发布代码提交 `ef8378077ace4b03a49f5958dafe4e204a5ed22a`，契约 0.9.1、迁移 011、Harness 0.2.0-rc.1。实验室负责人可在网页自助管理邀请码及本实验室大模型设置；注册、登录和密码维护接受至少 9 个字符的密码。平台总开关已开启，但 IFRC 实验室尚未配置 API Key 或启用模型。真实模型调用与小组试用待本人验收，G5b/P1 未通过。首次部署使用的提交 `69e52053d5850a195db38db9cde6832b13c91576`、契约 0.6.2 和迁移 008 保留在下文作为历史基线。
+
+## 2026-10-03 密码最短长度调整（已部署）
+
+注册和登录接口、维护者创建/重置账号及对应网页输入统一要求密码超过 8 个字符，即至少 9 个字符。8 个字符拒绝，9 个字符可注册、登录和重置；自动化测试覆盖这些边界。更改无需数据库迁移，现有账号密码无需重设。GitHub CI 的 Ubuntu 22.04、Ubuntu 24.04 和 Windows 24 矩阵通过；ECS 从固定提交 `ef8378077ace4b03a49f5958dafe4e204a5ed22a` 完成冻结依赖安装和 Linux 构建。
+
+切换前确认实验室模型启用数及活动任务数均为 0，停 API/worker 后用旧发布生成契约 0.9.0 的一致备份（含 1 个附件），并将平台配置及模型主密钥分别保存为同机 root-only 副本。原子切换发布链接后，两项服务均 active；公开 HTTPS 就绪接口返回契约 0.9.1、数据库/存储/认证 `ok`、harness `not_verified`。线上 Edge 注册页显示“密码需超过 8 个字符”和契约 0.9.1，登录页可正常打开。未用真实用户凭据提交注册或登录请求；9 位密码的服务端成功路径由自动化集成测试验证。模型仍需负责人自行保存 API Key 并启用后做真实调用验收。
 
 ## 2026-10-03 发送失败提示修复
 
 用户登录后点击需求入口“发送”，服务返回 `MODEL_UNAVAILABLE`：`B3_AI_ENABLED=0` 且独立模型凭据文件为空。此前反馈区在长页面末尾，用户看不到；再次点击又触发 `PENDING_INTENT`。修复版将错误放在发送表单旁并滚动到可见位置；对模型未启用而在创建生成请求前被拒绝的操作，释放本地未决请求，原输入保留。未配置密钥时仍不能生成 AI 方案，可选择手工创建方案。
 
 本次代码只改网页与使用说明；服务器确认 API 构建与迁移文件未变。400 个源码文件来自固定提交，三个改动文件的 Git 对象摘要与本地一致；Linux 构建成功，原子切换 `current`，未停 API/worker。HTTPS 新网页资源摘要与构建产物一致，API/worker 均 active，就绪接口仍返回契约 0.8.0、数据库/存储/认证 `ok`、harness `not_verified`。在独立 Edge 标签页用合成文本点击和再次点击“发送”，均显示邻近的 `MODEL_UNAVAILABLE` 提示、保留输入、无 `PENDING_INTENT`，控制台无相关错误；真实用户输入未在验收中代为重新提交。本地网页类型检查、构建、生产检查及全套 277 项测试通过；根 `pnpm run ci` 因本机依赖安装访问 npm 注册表受限，未完整运行。
+
+## 2026-10-03 实验室大模型设置升级（已部署）
+
+负责人登录后从“实验室设置”选择 DeepSeek Flash 或 V4 Pro，自行输入本实验室 API Key，并控制启停。保存不会测试连接或产生模型费用；首次“发送”仍需本人用合成内容验收真实调用。普通成员不能修改设置。服务不回显原始 Key；数据库只存 AES-256-GCM 密文，运行请求、幂等回执和模型子进程输入不含 Key。每个实验室只读取本实验室的 Key，平台 `B3_AI_ENABLED` 仍是总开关。
+
+发布前为 API 与 worker 共用账号创建独立 32 字节随机主密钥文件，例如 `/etc/research-agent-platform/lab-credentials.key`，内容为 64 位十六进制字符串，权限 root:research-agent 0640，目录不得对其他用户开放；在 `platform.env` 写 `LAB_CREDENTIAL_KEY_FILE` 绝对路径。不要把密钥值放入环境变量、Git、聊天、终端命令行或网页构建。先备份旧库与附件、隔离恢复并验证，再停服务迁移 011 两次，切换发布，最后开启 `B3_AI_ENABLED=1`。新发布中没有实验室默认启用；负责人须明确在网页保存并勾选启用。旧版回退前先把总开关恢复为 0，避免旧版读取全局模型环境变量后越过实验室设置。
+
+ECS 从固定提交获取源码并完成冻结依赖安装与 Linux 构建。科研 API/worker 停写后，旧版工具生成契约 0.8.0 的一致备份（含 1 个附件），并恢复至隔离目录。恢复副本及正式库各重复执行迁移 011 两次，均确认最高版本 11、`integrity_check=ok`、外键错误 0。主密钥文件为 root:research-agent 0640，另有同机 root-only 副本；worker unit 已移除旧 `model.env` 注入。切换固定发布链接后，API/worker 均 active，HTTPS 就绪接口返回契约 0.9.0、数据库/存储/认证 `ok`。以 IFRC 实验室负责人会话打开线上设置页，确认实验室名称、模型选择、未配置 Key 状态和可用的启用控件；网页控制台无相关警告或错误。尚未在正式 IFRC 实验室保存真实 DeepSeek Key，也未做真实模型调用；同机副本仍需按运维策略另存异机。
+
+数据库备份含加密 Key，须将主密钥文件另行备份到受控的独立位置；缺少该文件时原 Key 无法恢复。隔离恢复会自动关闭全部实验室的 AI 设置并中断活动任务；复核后由负责人重新启用。`model.env` 中的旧全局 `DEEPSEEK_API_KEY` 不再供 worker 使用，也不应保留于新部署。健康检查不会验证 DeepSeek 的真实可用性。
 
 ## 2026-10-03 实验室负责人自助邀请码升级
 
@@ -49,7 +65,7 @@ API/worker 使用独立系统账号、目录和 systemd 服务，已设开机启
 | 当前版本链接 | `/opt/research-agent-platform/current` |
 | 独立 Node 24 | `/opt/research-agent-platform/runtime/bin/node` |
 | 公共运行配置 | `/etc/research-agent-platform/platform.env` |
-| 模型秘密配置 | `/etc/research-agent-platform/model.env`，仅 worker 注入 |
+| 实验室主密钥 | `/etc/research-agent-platform/lab-credentials.key`，API/worker 读取；各实验室 API Key 仅在网页提交后加密入库 |
 | 数据库 / 附件 | `/var/lib/research-agent-platform/data/platform.sqlite` 和 `data/blobs` |
 | 备份父目录 | `/var/backups/research-agent-platform`，仅维护者和服务账号可访问 |
 | API / worker 服务 | `research-agent-api.service` / `research-agent-worker.service` |
@@ -67,7 +83,7 @@ API/worker 使用独立系统账号、目录和 systemd 服务，已设开机启
 5. **迁移并建正式账号。** 先保持 AI 关闭。按下方命令迁移两次，再使用生产维护入口创建实验室及各人的独立账号，不能用测试 seed。密码采用安全交互输入，最终只通过 stdin 进入 `operate.js`；不放在 shell 参数、命令历史或聊天里。Windows 的 `pilot-account.ps1` 不能原样在 Ubuntu 运行；执行者须在实际安全终端使用等效 stdin 入口，或提供并验证 Ubuntu 密码交互辅助程序。
 6. **接上网页。** 为选定子域名配置 DNS 与覆盖该名称的可信证书；不能默认现有站点的证书覆盖新子域名。替换 Nginx 模板全部占位符。只添加本站配置，先 `nginx -t`，成功后 reload Nginx，不 stop/restart Nginx。API 端口只监听 loopback，不新增公网业务端口。对比操作前后既有站点健康情况。
 7. **常驻与验证。** 将审查后的两个 unit 安装到 `/etc/systemd/system`，`systemd-analyze verify` 通过后 daemon-reload，再启用并启动本平台 API/worker。健康就绪后完成两个独立账号的 HTTPS 登录、邀请/承接/交付/验收、附件、刷新、服务重启、撤权和失败显示。进程 active 或首页 200 不等于平台验收。
-8. **启用 AI 与恢复演练。** 在用户指定的秘密配置中提供模型连接，仅 worker 读取；不默认复制招聘系统的 Key。API/worker 的 B3_AI_ENABLED 同步改为 1，再沿既有 capability-config 维护入口显式启用公共能力。以获准合成内容验证真实规划及公共文本能力、用量与内存；仅查看 health 不能证明 AI 可用。演练停写备份与新目录恢复后，才将真实资料交给成员使用。
+8. **启用 AI 与恢复演练。** 平台维护者配置独立主密钥文件并开启 `B3_AI_ENABLED`；实验室负责人在“实验室设置”自行保存本实验室 DeepSeek API Key、选择模型并明确启用。不复制招聘系统的 Key。公共能力另沿既有 capability-config 维护入口显式启用。负责人以获准合成内容验证真实规划及公共文本能力、用量与内存；仅查看 health 不能证明 AI 可用。演练停写备份与新目录恢复后，才将真实资料交给成员使用。
 
 首次迁移示例；前提是目录、配置、构建和 current 链接已经核对完成，API/worker 尚未启动：
 

@@ -27,7 +27,7 @@ let counter = 0
 const key = () => `b5a_synthetic_command_${++counter}`
 
 async function startServer(path = databasePath, blobs = join(directory, 'blobs')) {
-  const child = spawn(process.execPath, [resolve('apps/api/dist/main.js')], { env: { ...process.env, NODE_ENV: 'production', HOST: '127.0.0.1', PORT: '0', APP_ORIGIN: origin, DATABASE_PATH: path, BLOB_ROOT: blobs, B3_AI_ENABLED:'1' }, windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'] })
+  const child = spawn(process.execPath, [resolve('apps/api/dist/main.js')], { env: { ...process.env, NODE_ENV: 'production', HOST: '127.0.0.1', PORT: '0', APP_ORIGIN: origin, DATABASE_PATH: path, BLOB_ROOT: blobs, B3_AI_ENABLED:'1', LAB_CREDENTIAL_KEY_FILE:join(directory,'lab-credentials.key') }, windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'] })
   children.add(child)
   const url = await new Promise<string>((resolve, reject) => {
     let output = ''
@@ -94,7 +94,7 @@ async function accept(taskId: string) {
 }
 
 
-const config=()=>readConfig({NODE_ENV:'production',DATABASE_PATH:databasePath,BLOB_ROOT:join(directory,'blobs'),APP_ORIGIN:origin,B3_AI_ENABLED:'1'})
+const config=()=>readConfig({NODE_ENV:'production',DATABASE_PATH:databasePath,BLOB_ROOT:join(directory,'blobs'),APP_ORIGIN:origin,B3_AI_ENABLED:'1',LAB_CREDENTIAL_KEY_FILE:join(directory,'lab-credentials.key')})
 function operate(input:unknown){
  const r=spawnSync(process.execPath,[resolve('apps/api/dist/operate.js')],{env:{...process.env,NODE_ENV:'production',DATABASE_PATH:databasePath,BLOB_ROOT:join(directory,'blobs'),APP_ORIGIN:origin,OPERATOR_ID:'synthetic_operator'},input:JSON.stringify(input),encoding:'utf8',windowsHide:true})
  for(const a of accounts){expect(r.stdout).not.toContain(a.password);expect(r.stderr).not.toContain(a.password)}
@@ -102,13 +102,15 @@ function operate(input:unknown){
 }
 const admin=(action:string,fields:Record<string,unknown>={})=>operate({action,requestId:key(),labId:'lab_synthetic',...fields})
 beforeAll(async()=>{
- directory=mkdtempSync(join(tmpdir(),'rap-b5a-'));databasePath=join(directory,'platform.sqlite');mkdirSync(join(directory,'blobs'))
+ directory=mkdtempSync(join(tmpdir(),'rap-b5a-'));databasePath=join(directory,'platform.sqlite');mkdirSync(join(directory,'blobs'));writeFileSync(join(directory,'lab-credentials.key'),randomBytes(32).toString('hex'),{mode:0o600})
  db=openDatabase(databasePath,true);migrate(db);migrate(db)
  expect(admin('create-lab',{name:'Synthetic pilot'}).status).toBe(0)
  for(const a of accounts)expect(admin('create-account',{...a,displayName:'Synthetic pilot member'}).status).toBe(0)
+ db.prepare('INSERT INTO lab_managers(lab_id,member_id,granted_at) VALUES (?,?,?)').run('lab_synthetic','member_A',new Date().toISOString())
  expect(db.prepare('SELECT count(*) n FROM members WHERE is_synthetic=0').get()!.n).toBe(3)
  address=(await startServer()).url;secondAddress=(await startServer()).url
  clients={A:await loginAs('A'),B:await loginAs('B'),C:await loginAs('C')}
+ expect((await request('updateLabAiSettings',{client:clients.A,params:{id:'lab_synthetic'},body:{expectedVersion:0,enabled:true,model:'deepseek-flash',apiKey:'sk-synthetic-test-credential'}})).status).toBe(200)
 },30000)
 afterAll(async()=>{await stopServers();db?.close();if(directory)rmSync(directory,{recursive:true,force:true})})
 async function command<K extends RouteName>(name:K,id:string,client:Client,body:Record<string,unknown>={}){return request(name,{params:{id},client,body:{expectedVersion:(await detail(id,client)).task.version,...body}})}

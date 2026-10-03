@@ -68,6 +68,8 @@ export function restore(source:string,destination:string,operator:string){
     db.prepare('UPDATE sessions SET revoked_at=? WHERE revoked_at IS NULL').run(now)
     // A restored copy must not reopen a previously revoked or consumed invitation.
     db.prepare('UPDATE registration_invites SET revoked_at=? WHERE revoked_at IS NULL').run(now)
+    // A restored copy must never resume model calls. The external master key is restored separately.
+    db.prepare('UPDATE lab_ai_settings SET enabled=0,version=version+1,updated_at=? WHERE enabled=1').run(now)
     db.exec('DELETE FROM registration_work')
     db.prepare("UPDATE runtime_meta SET value=? WHERE key='signing_key'").run(randomBytes(32).toString('hex'))
     for(const row of db.prepare("SELECT id,document FROM execution_jobs WHERE status IN ('queued','running','waiting_input')").all()){

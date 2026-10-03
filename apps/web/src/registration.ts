@@ -5,8 +5,8 @@ export const registrationPage = `<section class="flow login"><p class="eyebrow">
 <label>实验室邀请码<input name="inviteCode" required minlength="20" maxlength="128" pattern="[A-Za-z0-9_\\-]+" autocomplete="off" autocapitalize="none" spellcheck="false" aria-describedby="invite-help"></label><p class="fine" id="invite-help">向实验室负责人索取邀请码。注册后加入该邀请码对应的实验室。</p>
 <label>账号<input name="username" required maxlength="100" pattern="[A-Za-z0-9_\\-]+" autocomplete="username" autocapitalize="none" spellcheck="false" aria-describedby="username-help"></label><p class="fine" id="username-help">使用英文字母、数字、下划线或短横线；登录时区分大小写。</p>
 <label>显示名<input name="displayName" required maxlength="200" autocomplete="name"></label>
-<label>密码<input name="password" type="password" required minlength="16" maxlength="256" autocomplete="new-password" aria-describedby="password-help"></label><p class="fine" id="password-help">至少 16 个字符，可使用容易记住的长密码。</p>
-<label>确认密码<input name="confirmation" type="password" required minlength="16" maxlength="256" autocomplete="new-password"></label>
+<label>密码<input name="password" type="password" required minlength="9" maxlength="256" autocomplete="new-password" aria-describedby="password-help"></label><p class="fine" id="password-help">密码需超过 8 个字符；建议使用容易记住且不重复的密码。</p>
+<label>确认密码<input name="confirmation" type="password" required minlength="9" maxlength="256" autocomplete="new-password"></label>
 <button class="primary" type="submit">注册</button><div data-registration-status aria-live="polite"></div></form><p>已有账号？<a href="#/login">去登录</a></p></section>`;
 
 const messages: Record<string,string> = {

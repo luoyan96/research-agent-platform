@@ -18,7 +18,7 @@ if ($Action -in @('reset-password','disable-account')) { $payload.expectedVersio
 $secure = $null
 try {
  if ($Action -in @('create-account','reset-password')) {
-  $secure = Read-Host 'New unique password (16-256 characters; not echoed)' -AsSecureString
+  $secure = Read-Host 'New unique password (9-256 characters; not echoed)' -AsSecureString
   $pointer = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secure)
   try { $payload.password = [Runtime.InteropServices.Marshal]::PtrToStringBSTR($pointer) }
   finally { [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($pointer) }

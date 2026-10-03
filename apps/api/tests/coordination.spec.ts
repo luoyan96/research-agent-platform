@@ -331,7 +331,7 @@ describe('B2b A6–A9: transaction database and two actual HTTP processes',()=>{
       const tables=[...Object.keys(selectors),'member_availability'],before=tables.map(t=>JSON.stringify(legacy.prepare(`SELECT * FROM ${t} ORDER BY rowid`).all()))
       migrate(legacy);migrate(legacy)
       expect(tables.map(t=>JSON.stringify(legacy.prepare(`SELECT * FROM ${t} ORDER BY rowid`).all()))).toEqual(before)
-      expect(legacy.prepare('SELECT count(*) n FROM schema_migrations').get()!.n).toBe(10)
+      expect(legacy.prepare('SELECT count(*) n FROM schema_migrations').get()!.n).toBe(11)
       expect(legacy.prepare('SELECT document FROM task_versions WHERE task_id=?').get(id)!.document).toBe(legacy.prepare('SELECT document FROM tasks WHERE id=?').get(id)!.document)
       expect(legacy.prepare('SELECT count(*) n FROM assignment_versions').get()!.n).toBe(1)
       const original=databasePath;databasePath=legacyPath

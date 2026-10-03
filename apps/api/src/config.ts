@@ -14,6 +14,8 @@ export function readConfig(env: NodeJS.ProcessEnv = process.env) {
   const origin = env.APP_ORIGIN ?? `http://127.0.0.1:${port}`
   if (new URL(origin).origin !== origin || !['http:', 'https:'].includes(new URL(origin).protocol)) throw new Error('APP_ORIGIN must be an exact HTTP origin')
   if (mode === 'production' && (!env.APP_ORIGIN || !origin.startsWith('https://'))) throw new Error('Production requires HTTPS APP_ORIGIN')
-  return { aiEnabled: env.B3_AI_ENABLED === '1', model: env.DEEPSEEK_MODEL ?? 'deepseek-v4-flash', mode, databasePath, blobRoot, host: env.HOST ?? '127.0.0.1', port, origin }
+  const credentialKeyFile = env.LAB_CREDENTIAL_KEY_FILE ?? null
+  if (credentialKeyFile && !isAbsolute(credentialKeyFile)) throw new Error('LAB_CREDENTIAL_KEY_FILE must be absolute')
+  return { aiEnabled: env.B3_AI_ENABLED === '1', model: env.DEEPSEEK_MODEL ?? 'deepseek-flash', credentialKeyFile, mode, databasePath, blobRoot, host: env.HOST ?? '127.0.0.1', port, origin }
 }
 export type Config = ReturnType<typeof readConfig>

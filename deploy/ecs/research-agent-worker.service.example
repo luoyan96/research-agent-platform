@@ -12,8 +12,7 @@ User=research-agent
 Group=research-agent
 WorkingDirectory=/opt/research-agent-platform/current
 EnvironmentFile=/etc/research-agent-platform/platform.env
-# The file may be absent while AI is disabled. Only the worker receives the key.
-EnvironmentFile=-/etc/research-agent-platform/model.env
+# Per-lab API keys are decrypted by the worker from the database using LAB_CREDENTIAL_KEY_FILE.
 ExecStart=/opt/research-agent-platform/runtime/bin/node apps/api/dist/worker.js
 Restart=on-failure
 RestartSec=5

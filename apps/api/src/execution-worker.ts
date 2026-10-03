@@ -11,15 +11,17 @@ import type { Run, Planning, PlanningInput } from './ai.js'
 import type { Config } from './config.js'
 import { transaction } from './database.js'
 import { randomUUID } from 'node:crypto'
+import { labAiRuntime, labApiKey } from './lab-ai-settings.js'
 
 export interface ModelInput {system:string;prompt:string;model:string;maxTokens:number;timeoutMs:number}
 export interface ModelResult {text:string;failure:string|null;inputTokens:number|null;outputTokens:number|null;elapsedMs:number}
-export type ModelCall=(input:ModelInput,signal:AbortSignal)=>Promise<ModelResult>
+export type ModelCall=(input:ModelInput,signal:AbortSignal,credential:{apiKey:string})=>Promise<ModelResult>
 const encode=JSON.stringify
 export function serviceFor(db:DatabaseSync,ownerId:string,config:Config){
   const actor=db.prepare('SELECT m.id,m.lab_id,a.disabled FROM members m JOIN auth_accounts a ON a.member_id=m.id WHERE m.id=?').get(ownerId)
   if(!actor||actor.disabled!==0)throw new Error('AUTHORITY_REVOKED')
-  return new AiService(new Collaboration(db,{id:ownerId,labId:String(actor.lab_id),csrfHash:'',expiresAt:'9999-12-31T00:00:00Z'},config.blobRoot,{enabled:config.aiEnabled,model:config.model}),config.aiEnabled,config.model)
+  const labAi=labAiRuntime(db,String(actor.lab_id),config)
+  return new AiService(new Collaboration(db,{id:ownerId,labId:String(actor.lab_id),csrfHash:'',expiresAt:'9999-12-31T00:00:00Z'},config.blobRoot,labAi),labAi.enabled,labAi.model)
 }
 export function reconcile(db:DatabaseSync,config:Config){
   for(const cap of db.prepare("SELECT c.lab_id,c.version,s.active_version FROM public_capabilities c JOIN public_method_state s ON s.lab_id=c.lab_id JOIN public_methods m ON m.lab_id=s.lab_id AND m.version=s.active_version WHERE c.enabled=1 AND EXISTS(SELECT 1 FROM json_each(m.document,'$.sampleIds') ref JOIN invalid_samples i ON i.id=ref.value)").all()){db.prepare('UPDATE public_capabilities SET enabled=0,version=version+1 WHERE lab_id=?').run(cap.lab_id!);db.prepare("INSERT INTO method_events(lab_id,method_version,generation,action,at) VALUES(?,?,?,'sample_revoked',?)").run(cap.lab_id!,cap.active_version!,Number(cap.version)+1,instant())}
@@ -28,7 +30,8 @@ export function reconcile(db:DatabaseSync,config:Config){
     let failure:string|null=null
     try{
       const service=serviceFor(db,String(row.owner_id),config)
-      if(row.kind==='capability'){
+      if(!service.enabled)failure='MODEL_UNAVAILABLE'
+      else if(row.kind==='capability'){
         const r=RunRecord.parse(doc),task=service.c.task(r.taskId)
         if(task.status==='cancelled')failure='TASK_CANCELLED'
         else if(task.leadId!==r.requestedBy||service.permission(task.id)!==r.permissionVersion)failure='AUTHORITY_CHANGED'
@@ -48,9 +51,10 @@ export function reconcile(db:DatabaseSync,config:Config){
 }
 // Only this trusted coordinator has DB access. The Harness child receives bounded
 // authorized text over stdin, no DB path, cookie, blob path, service secret or tools.
-export const callHarness:ModelCall=async(input,signal)=>new Promise(resolve=>{
+export const callHarness:ModelCall=async(input,signal,credential)=>new Promise(resolve=>{
   const childEnv:NodeJS.ProcessEnv={}
-  for(const name of ['SystemRoot','WINDIR','PATH','TEMP','TMP','DEEPSEEK_API_KEY','DEEPSEEK_BASE_URL'])if(process.env[name])childEnv[name]=process.env[name]
+  for(const name of ['SystemRoot','WINDIR','PATH','TEMP','TMP','DEEPSEEK_BASE_URL'])if(process.env[name])childEnv[name]=process.env[name]
+  childEnv.DEEPSEEK_API_KEY=credential.apiKey
   const child=spawn(process.execPath,[fileURLToPath(new URL('../../../integrations/deepseek-harness/runtime/dist/cli.js',import.meta.url))],{env:childEnv,windowsHide:true,stdio:['pipe','pipe','pipe']})
   let output='',settled=false
   const started=Date.now()
@@ -74,9 +78,10 @@ export class ExecutionWorker {
       if(!row)return null
       const service=serviceFor(this.db,String(row.owner_id),this.config)
       let doc=JSON.parse(String(row.document)) as Run|Planning
-      let input:ModelInput,attempt=Number(this.db.prepare('SELECT count(*) n FROM execution_attempts WHERE job_id=?').get(row.id!)!.n)+1
+      let input:ModelInput,credential:{apiKey:string},attempt=Number(this.db.prepare('SELECT count(*) n FROM execution_attempts WHERE job_id=?').get(row.id!)!.n)+1
       try{
-        if(!this.config.aiEnabled)throw new Error('MODEL_UNAVAILABLE')
+        if(!service.enabled)throw new Error('MODEL_UNAVAILABLE')
+        const apiKey=labApiKey(this.db,service.c.actor.labId,this.config)
         let budget:{maxTokens:number;maxSeconds:number},prompt:unknown,system:string
         if(row.kind==='capability'){
           const r=RunRecord.parse(doc),task=service.dispatchValid(r)
@@ -109,7 +114,9 @@ export class ExecutionWorker {
         if(attempt>3)throw new Error('ATTEMPT_LIMIT')
         const elapsed=spent.reduce((n,r)=>n+(r?.elapsedMs??0),0),remainingMs=budget.maxSeconds*1000-elapsed
         if(remainingMs<=0)throw new Error('TIME_BUDGET_EXCEEDED')
-        input={system,prompt:text,model:row.kind==='capability'?(doc as Run).model:this.config.model,maxTokens:Math.min(4096,remaining),timeoutMs:Math.min(120000,remainingMs)}
+        input={system,prompt:text,model:row.kind==='capability'?(doc as Run).model:service.model,maxTokens:Math.min(4096,remaining),timeoutMs:Math.min(120000,remainingMs)}
+        // Keep the decrypted key in this coordinator only; request_json and execution_attempts never contain it.
+        credential={apiKey}
       }catch(error){doc.status='failed';doc.failure=error instanceof Error && /^[A-Z_]+$/.test(error.message)?error.message:'PRECONDITION_FAILED';service.save(String(row.id),doc);return null}
       if(row.kind==='capability'){
         const r=doc as Run,task=service.c.task(r.taskId)
@@ -120,7 +127,7 @@ export class ExecutionWorker {
       doc.status='running';doc.failure=null;service.save(String(row.id),doc)
       this.db.prepare('UPDATE execution_jobs SET fence=?,lease_owner=?,lease_until=? WHERE id=?').run(fence,this.owner,Date.now()+15000,row.id!)
       this.db.prepare('INSERT INTO execution_attempts VALUES (?,?,?,?,NULL,?,NULL)').run(row.id!,attempt,fence,instant(),encode(input))
-      return {id:String(row.id),kind:String(row.kind),ownerId:String(row.owner_id),fence,attempt,input}
+      return {id:String(row.id),kind:String(row.kind),ownerId:String(row.owner_id),fence,attempt,input,credential}
     })
     if(!job)return false
     const controller=new AbortController()
@@ -130,7 +137,7 @@ export class ExecutionWorker {
     },1000)
     let result:ModelResult
     const callStarted=Date.now()
-    try{result=await this.call(job.input,controller.signal)}catch{result={text:'',failure:'MODEL_TRANSPORT_FAILED',inputTokens:null,outputTokens:null,elapsedMs:Date.now()-callStarted}}
+    try{result=await this.call(job.input,controller.signal,job.credential)}catch{result={text:'',failure:'MODEL_TRANSPORT_FAILED',inputTokens:null,outputTokens:null,elapsedMs:Date.now()-callStarted}}
     clearTimeout(timeout);clearInterval(heartbeat)
     transaction(this.db,()=>{
       // Accounting survives cancellation, but late content can never change business state.

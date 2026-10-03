@@ -18,6 +18,7 @@ import { cleanBlobs } from './coordination.js'
 import { ApiError, fail } from './errors.js'
 import { register } from './registration.js'
 import { isLabManager, managerInvites, createManagerInvite, revokeManagerInvite } from './invite-management.js'
+import { labAiRuntime, labAiSettings, updateLabAiSettings } from './lab-ai-settings.js'
 
 export function createServer(config: Config) {
   const app = Fastify({ logger: false, bodyLimit: 1048576, genReqId: () => randomUUID(), requestTimeout: 10000 })
@@ -88,10 +89,13 @@ export function createServer(config: Config) {
         if (name === 'managerInvites') return routes.managerInvites.response.parse(managerInvites(connection,actor,parsed.data as RequestFor<'managerInvites'>))
         if (name === 'createManagerInvite') return routes.createManagerInvite.response.parse(createManagerInvite(connection,actor,parsed.data as RequestFor<'createManagerInvite'>))
         if (name === 'revokeManagerInvite') return routes.revokeManagerInvite.response.parse(revokeManagerInvite(connection,actor,parsed.data as RequestFor<'revokeManagerInvite'>))
-        collaboration = new Collaboration(connection,actor,config.blobRoot,{enabled:config.aiEnabled,model:config.model})
+        if (name === 'labAiSettings') return routes.labAiSettings.response.parse(labAiSettings(connection,actor,parsed.data as RequestFor<'labAiSettings'>,config))
+        if (name === 'updateLabAiSettings') return routes.updateLabAiSettings.response.parse(updateLabAiSettings(connection,actor,parsed.data as RequestFor<'updateLabAiSettings'>,config))
+        const labAi = labAiRuntime(connection,actor.labId,config)
+        collaboration = new Collaboration(connection,actor,config.blobRoot,labAi)
         reconcile(connection,config)
         if((reuseCommands as readonly string[]).includes(name)){const result=new ReuseService(collaboration).run(name as ReuseCommand,parsed.data as RequestFor<ReuseCommand>);reconcile(connection,config);return result}
-        if((aiCommands as readonly string[]).includes(name))return new AiService(collaboration,config.aiEnabled,config.model).run(name as AiCommand,parsed.data as RequestFor<AiCommand>)
+        if((aiCommands as readonly string[]).includes(name))return new AiService(collaboration,labAi.enabled,labAi.model).run(name as AiCommand,parsed.data as RequestFor<AiCommand>)
         if (!(collaborationCommands as readonly string[]).includes(name)) fail('NOT_IMPLEMENTED')
         const result=collaboration.run(name as CollaborationCommand, parsed.data as RequestFor<CollaborationCommand>)
         reconcile(connection,config)

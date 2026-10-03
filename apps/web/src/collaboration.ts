@@ -89,7 +89,7 @@ function schedule(s: Schedule) {
   return `<dl class="facts"><dt>建议时间</dt><dd>${e(date(s.suggested))}</dd><dt>硬性截止</dt><dd>${e(date(s.hardDeadline))}</dd><dt>承诺时间</dt><dd>${e(date(s.committed))}</dd><dt>预计投入</dt><dd>${s.estimatedHumanHours === null ? '未约定' : e(String(s.estimatedHumanHours)) + ' 小时'}</dd><dt>检查节点</dt><dd>${e(s.checkpoint?(s.checkpoint.kind==='date'?s.checkpoint.date+' · '+s.checkpoint.timezone:s.checkpoint.at):'未约定')}</dd></dl>`;
 }
 function shell() {
-  app.innerHTML = `<button class="skip" data-skip>跳到主要内容</button><header>${link('/', '<img src="/brand.png" width="38" height="38" alt=""><span>Research Agent Platform</span>', 'brand')}<nav aria-label="主导航">${link('/', '需求入口')}${link('/lab', '实验室任务')}${session?.isLabManager ? link('/manage/invites','邀请码管理') : ''}${session ? `<span class="session-name">${e(session.member.displayName)}</span>${button('logout','退出登录')}` : link('/login','登录')}</nav></header><main id="main" tabindex="-1"><section class="state-panel" role="status">正在从服务读取…</section></main><footer>建议需确认 · 运行需验收 · 契约 ${contractVersion}</footer>`;
+  app.innerHTML = `<button class="skip" data-skip>跳到主要内容</button><header>${link('/', '<img src="/brand.png" width="38" height="38" alt=""><span>Research Agent Platform</span>', 'brand')}<nav aria-label="主导航">${link('/', '需求入口')}${link('/lab', '实验室任务')}${session?.isLabManager ? link('/lab/settings','实验室设置') : ''}${session ? `<span class="session-name">${e(session.member.displayName)}</span>${button('logout','退出登录')}` : link('/login','登录')}</nav></header><main id="main" tabindex="-1"><section class="state-panel" role="status">正在从服务读取…</section></main><footer>建议需确认 · 运行需验收 · 契约 ${contractVersion}</footer>`;
   document.querySelector<HTMLButtonElement>('[data-skip]')!.onclick = () => document.querySelector<HTMLElement>('main')!.focus();
   action('logout', async () => {
     await api.call('logout', {params:{},query:{},headers:{},body:{}});
@@ -160,7 +160,7 @@ function form(key: string, fn: (data: FormData, submitter: HTMLElement | null) =
 const field = (label: string, key: string, value = '', area = false, max = 8000) => `<label>${label}${area ? `<textarea name="${key}" required maxlength="${max}" rows="3">${e(value)}</textarea>` : `<input name="${key}" required maxlength="${max}" value="${e(value)}">`}</label>`;
 
 function login() {
-  content(`<section class="flow login"><p class="eyebrow">进入你的协作空间</p><h1>登录</h1><p class="intro">使用你的账号继续协作。</p><form data-form="login" class="panel">${field('账号','username','',false,100)}<label>密码<input name="password" type="password" required minlength="12" maxlength="256" autocomplete="current-password"></label><button class="primary" type="submit">登录</button><p class="fine">忘记密码或账号停用时请联系管理员；密码重置后使用新密码。</p></form><p>还没有账号？${link('/register','使用邀请码注册')}</p><p>${link('/help','首次使用与恢复指引')}</p></section>`, '登录');
+  content(`<section class="flow login"><p class="eyebrow">进入你的协作空间</p><h1>登录</h1><p class="intro">使用你的账号继续协作。</p><form data-form="login" class="panel">${field('账号','username','',false,100)}<label>密码<input name="password" type="password" required minlength="9" maxlength="256" autocomplete="current-password"></label><button class="primary" type="submit">登录</button><p class="fine">忘记密码或账号停用时请联系管理员；密码重置后使用新密码。</p></form><p>还没有账号？${link('/register','使用邀请码注册')}</p><p>${link('/help','首次使用与恢复指引')}</p></section>`, '登录');
   document.querySelector<HTMLInputElement>('[name=username]')!.autocomplete = 'username';
   form('login', async data => {
     busy = true;
@@ -188,6 +188,21 @@ async function inviteManagement(signal:AbortSignal) {
     const inviteId=el.dataset.revokeInvite!;
     void mutate(new Intent('revokeManagerInvite',{}, {id:session!.member.labId,inviteId}),async()=>{if(issuedInvite?.invite.id===inviteId)issuedInvite=undefined;await inviteManagement(signal);});
   });
+}
+async function labSettings(signal:AbortSignal) {
+  if(!session?.isLabManager){content('<section class="state-panel"><h1>无法访问此内容</h1><p>当前账号不是实验室管理员。</p></section>','无法访问');return;}
+  const response=await api.read('labAiSettings',{id:session.member.labId},{},signal);
+  if(signal.aborted)return;
+  const settings=response.data;
+  content(`<section class="flow narrow">${link('/lab','← 实验室任务','back')}<p class="eyebrow">实验室管理</p><h1>实验室设置</h1><p class="intro">${e(settings.labName)} · 仅本实验室负责人可配置大模型。设置作用于当前实验室的后续模型请求。</p><section class="panel"><h2>大模型配置</h2><p role="status">当前状态：${settings.enabled&&settings.platformEnabled?'已启用':settings.enabled?'已保存，但平台尚未开放模型':'未启用'} · API Key ${settings.hasApiKey?'已保存':'未配置'}</p>${!settings.platformEnabled?'<p class="alert">平台模型服务尚未开放。可先保存密钥和模型；启用需由平台维护者开放服务。</p>':''}<form data-form="lab-ai-settings"><label>DeepSeek 模型<select name="model"><option value="deepseek-flash" ${settings.model==='deepseek-flash'?'selected':''}>DeepSeek Flash</option><option value="deepseek-v4-pro" ${settings.model==='deepseek-v4-pro'?'selected':''}>DeepSeek V4 Pro</option></select></label><label>新的 DeepSeek API Key（留空则保持原密钥）<input name="apiKey" type="password" minlength="8" maxlength="512" autocomplete="off" spellcheck="false" placeholder="${settings.hasApiKey?'已保存；如需更换请填入新密钥':'输入 sk- 开头的密钥'}"></label><label class="lab-setting-check"><input name="enabled" type="checkbox" ${settings.enabled?'checked':''} ${!settings.platformEnabled?'disabled':''}> 启用本实验室的大模型调用</label>${settings.hasApiKey?'<label class="lab-setting-check"><input name="removeApiKey" type="checkbox"> 关闭并删除已保存的 API Key</label>':''}<p class="fine">密钥保存后不再显示原文。保存设置不会调用模型；启用后成员发送模型请求可能产生 DeepSeek 费用。关闭后，手工创建方案仍可使用。</p><button class="primary" type="submit">保存大模型设置</button></form><p class="fine">设置版本 ${settings.version}${settings.updatedAt?' · 更新于 '+e(new Date(settings.updatedAt).toLocaleString()):''}</p></section><section class="panel"><h2>成员注册</h2><p>负责人可以签发邀请码，成员自行设置账号和密码。</p>${link('/manage/invites','管理邀请码','button')}</section></section>`,'实验室设置');
+  form('lab-ai-settings',async data=>{
+    const key=String(data.get('apiKey')??'');
+    const removeApiKey=data.get('removeApiKey')==='on';
+    const body={expectedVersion:settings.version,enabled:data.get('enabled')==='on'&&!removeApiKey,model:String(data.get('model')) as 'deepseek-flash'|'deepseek-v4-pro',...(key?{apiKey:key}:{}),...(removeApiKey?{removeApiKey:true}:{})};
+    await mutate(new Intent('updateLabAiSettings',body,{id:session!.member.labId}),async()=>{await load();document.querySelector('#feedback')!.innerHTML='<p role="status">大模型设置已保存，状态已从服务重新读取。</p>';});
+  },false);
+  const removal=document.querySelector<HTMLInputElement>('[name=removeApiKey]');
+  if(removal)removal.onchange=()=>{const secret=document.querySelector<HTMLInputElement>('[name=apiKey]')!,enabled=document.querySelector<HTMLInputElement>('[name=enabled]')!;if(removal.checked){secret.value='';secret.disabled=true;enabled.checked=false;enabled.disabled=true;}else{secret.disabled=false;enabled.disabled=!settings.platformEnabled;}};
 }
 function selectedConclusions(root:ParentNode=document):NonNullable<RequestFor<'planRequest'>['body']['conclusionRefs']>{return [...root.querySelectorAll<HTMLInputElement>('[data-conclusion-ref]:checked:not(:disabled)')].map(el=>({id:el.dataset.conclusionRef!,version:Number(el.dataset.version)}));}
 async function selectableConclusions(signal:AbortSignal){
@@ -423,6 +438,7 @@ function availabilityEditor() {
 async function load() {
   controller?.abort();controller=new AbortController();const signal=controller.signal;const path=route();activeSnapshot=undefined;shell();
   if(path!=='/manage/invites')issuedInvite=undefined;
+  if(path!=='/lab/settings'&&command.intent?.route==='updateLabAiSettings'){command.discard();retryCommand=undefined;}
   try {
     if(path==='/login'){login();return;}
     if(path==='/register'){content(registrationPage,'注册账号');bindRegistration(app,api,signal);return;}
@@ -443,6 +459,7 @@ async function load() {
     if(path==='/')await dailyEntry(signal);
     else if(path==='/lab')await taskList(signal);
     else if(path==='/manage/invites')await inviteManagement(signal);
+    else if(path==='/lab/settings')await labSettings(signal);
     else if(path==='/plans'||path.startsWith('/plans?'))await planList(signal);
     else if(path==='/actions')await actionList(signal);
     else if(path==='/methods')await methodsPage(signal);

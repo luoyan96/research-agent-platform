@@ -73,7 +73,7 @@ export async function login(db: DatabaseSync, username: string, password: string
 export async function provisionTestAccounts(db: DatabaseSync, mode: string, credentials: { memberId: string; username: string; password: string }[]) {
   if (!['development', 'test'].includes(mode)) throw new Error('Test credentials forbidden in production')
   for (const account of credentials) {
-    if (!['member_A', 'member_B', 'member_C'].includes(account.memberId) || account.password.length < 12 || account.password.length > 256 || !/^[a-zA-Z0-9_-]{1,100}$/.test(account.username)) throw new Error('Invalid synthetic account')
+    if (!['member_A', 'member_B', 'member_C'].includes(account.memberId) || account.password.length < 9 || account.password.length > 256 || !/^[a-zA-Z0-9_-]{1,100}$/.test(account.username)) throw new Error('Invalid synthetic account')
     const member = db.prepare("SELECT id FROM members WHERE id=? AND lab_id='lab_synthetic' AND is_synthetic=1").get(account.memberId)
     if (!member) throw new Error('Run synthetic seed first')
     const prior = db.prepare('SELECT * FROM auth_accounts WHERE member_id=?').get(account.memberId)

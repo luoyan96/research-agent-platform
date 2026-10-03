@@ -3,13 +3,14 @@ import { readConfig } from './config.js'
 import { openDatabase,checkDatabase,transaction } from './database.js'
 import { capabilityId } from './ai.js'
 import { reconcile } from './execution-worker.js'
+import { labAiRuntime } from './lab-ai-settings.js'
 const config=readConfig(),[action,labId,ownerId]=process.argv.slice(2)
 if(!['enable','disable'].includes(action??'')||!labId)throw new Error('Use enable|disable LAB_ID OWNER_MEMBER_ID (owner required on first configuration)')
-if(action==='enable' && (!config.aiEnabled||!process.env.DEEPSEEK_API_KEY))throw new Error('Enable requires B3_AI_ENABLED=1 and server-side DEEPSEEK_API_KEY; never print the value')
 const releaseProcess=processGuard(config.databasePath);process.once('exit',releaseProcess)
 const db=openDatabase(config.databasePath)
 try{checkDatabase(db);transaction(db,()=>{
   if(!db.prepare('SELECT 1 FROM labs WHERE id=?').get(labId))throw new Error('Unknown lab')
+  if(action==='enable' && !labAiRuntime(db,labId!,config).enabled)throw new Error('Enable requires active lab AI settings and an encrypted lab API key')
   const current=db.prepare('SELECT enabled,owner_id FROM public_capabilities WHERE lab_id=? AND id=?').get(labId,capabilityId)
   const enabled=action==='enable'?1:0
   if(enabled && !db.prepare('SELECT 1 FROM auth_accounts a JOIN members m ON m.id=a.member_id WHERE a.member_id=? AND m.lab_id=? AND a.disabled=0').get(current?.owner_id??ownerId??'',labId))throw new Error('Active owner account required')

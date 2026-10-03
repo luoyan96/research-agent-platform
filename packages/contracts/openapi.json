@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Research Agent Platform B0 contract",
-    "version": "0.8.0"
+    "version": "0.9.1"
   },
   "paths": {
     "/api/v1/health/live": {
@@ -34,7 +34,7 @@
                         },
                         "contractVersion": {
                           "type": "string",
-                          "const": "0.8.0"
+                          "const": "0.9.1"
                         },
                         "checks": {
                           "type": "object",
@@ -93,7 +93,7 @@
                 "example": {
                   "data": {
                     "status": "ok",
-                    "contractVersion": "0.8.0",
+                    "contractVersion": "0.9.1",
                     "checks": {
                       "database": "ok",
                       "storage": "ok",
@@ -247,7 +247,7 @@
                         },
                         "contractVersion": {
                           "type": "string",
-                          "const": "0.8.0"
+                          "const": "0.9.1"
                         },
                         "checks": {
                           "type": "object",
@@ -306,7 +306,7 @@
                 "example": {
                   "data": {
                     "status": "ok",
-                    "contractVersion": "0.8.0",
+                    "contractVersion": "0.9.1",
                     "checks": {
                       "database": "ok",
                       "storage": "ok",
@@ -438,7 +438,7 @@
                         },
                         "contractVersion": {
                           "type": "string",
-                          "const": "0.8.0"
+                          "const": "0.9.1"
                         },
                         "checks": {
                           "type": "object",
@@ -497,7 +497,7 @@
                 "example": {
                   "data": {
                     "status": "ok",
-                    "contractVersion": "0.8.0",
+                    "contractVersion": "0.9.1",
                     "checks": {
                       "database": "ok",
                       "storage": "ok",
@@ -534,7 +534,7 @@
                   },
                   "password": {
                     "type": "string",
-                    "minLength": 12,
+                    "minLength": 9,
                     "maxLength": 256
                   }
                 },
@@ -546,7 +546,7 @@
               },
               "example": {
                 "username": "synthetic",
-                "password": "syntheticxxx"
+                "password": "synthetic"
               }
             }
           }
@@ -1190,7 +1190,7 @@
                   },
                   "password": {
                     "type": "string",
-                    "minLength": 16,
+                    "minLength": 9,
                     "maxLength": 256
                   }
                 },
@@ -1206,7 +1206,7 @@
                 "inviteCode": "syntheticxxxxxxxxxxx",
                 "username": "synthetic",
                 "displayName": "synthetic",
-                "password": "syntheticxxxxxxx"
+                "password": "synthetic"
               }
             }
           }
@@ -2884,6 +2884,515 @@
                     "createdAt": "2026-09-21T08:00:00+08:00",
                     "revokedAt": null,
                     "createdBy": null
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "See error.code mapping and retry rules in protocol.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "See error.code mapping and retry rules in protocol.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "See error.code mapping and retry rules in protocol.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "See error.code mapping and retry rules in protocol.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "See error.code mapping and retry rules in protocol.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "See error.code mapping and retry rules in protocol.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "See error.code mapping and retry rules in protocol.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "See error.code mapping and retry rules in protocol.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "See error.code mapping and retry rules in protocol.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "501": {
+            "description": "See error.code mapping and retry rules in protocol.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "See error.code mapping and retry rules in protocol.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/labs/{id}/ai-settings": {
+      "get": {
+        "operationId": "labAiSettings",
+        "description": "Current lab manager only. Returns configuration metadata, never the API key or ciphertext.",
+        "x-stage": "B5b",
+        "x-implemented": true,
+        "security": [
+          {
+            "sessionCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9_-]{1,96}$"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "B5b contract; implemented",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$schema": "https://json-schema.org/draft/2020-12/schema",
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "labId": {
+                          "type": "string",
+                          "pattern": "^[A-Za-z0-9_-]{1,96}$"
+                        },
+                        "labName": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 200
+                        },
+                        "enabled": {
+                          "type": "boolean"
+                        },
+                        "platformEnabled": {
+                          "type": "boolean"
+                        },
+                        "hasApiKey": {
+                          "type": "boolean"
+                        },
+                        "model": {
+                          "type": "string",
+                          "enum": [
+                            "deepseek-flash",
+                            "deepseek-v4-pro"
+                          ]
+                        },
+                        "version": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 9007199254740991
+                        },
+                        "updatedAt": {
+                          "anyOf": [
+                            {
+                              "type": "string",
+                              "format": "date-time",
+                              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        }
+                      },
+                      "required": [
+                        "labId",
+                        "labName",
+                        "enabled",
+                        "platformEnabled",
+                        "hasApiKey",
+                        "model",
+                        "version",
+                        "updatedAt"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ],
+                  "additionalProperties": false
+                },
+                "example": {
+                  "data": {
+                    "labId": "synthetic",
+                    "labName": "synthetic",
+                    "enabled": false,
+                    "platformEnabled": false,
+                    "hasApiKey": false,
+                    "model": "deepseek-flash",
+                    "version": 0,
+                    "updatedAt": null
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "See error.code mapping and retry rules in protocol.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "See error.code mapping and retry rules in protocol.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "See error.code mapping and retry rules in protocol.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "See error.code mapping and retry rules in protocol.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "See error.code mapping and retry rules in protocol.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "See error.code mapping and retry rules in protocol.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "See error.code mapping and retry rules in protocol.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "See error.code mapping and retry rules in protocol.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "See error.code mapping and retry rules in protocol.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "501": {
+            "description": "See error.code mapping and retry rules in protocol.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "See error.code mapping and retry rules in protocol.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "operationId": "updateLabAiSettings",
+        "description": "Current lab manager only. Same-origin and CSRF required. Secret is encrypted at rest and never returned; it can be explicitly deleted while disabled. Idempotent exact retry.",
+        "x-stage": "B5b",
+        "x-implemented": true,
+        "security": [
+          {
+            "sessionCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9_-]{1,96}$"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9_-]{16,128}$"
+            }
+          },
+          {
+            "name": "X-CSRF-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 32,
+              "maxLength": 128
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "expectedVersion": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "enabled": {
+                    "type": "boolean"
+                  },
+                  "model": {
+                    "type": "string",
+                    "enum": [
+                      "deepseek-flash",
+                      "deepseek-v4-pro"
+                    ]
+                  },
+                  "apiKey": {
+                    "type": "string",
+                    "minLength": 8,
+                    "maxLength": 512
+                  },
+                  "removeApiKey": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "expectedVersion",
+                  "enabled",
+                  "model"
+                ],
+                "additionalProperties": false
+              },
+              "example": {
+                "expectedVersion": 0,
+                "enabled": false,
+                "model": "deepseek-flash"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "B5b contract; implemented",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$schema": "https://json-schema.org/draft/2020-12/schema",
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "labId": {
+                          "type": "string",
+                          "pattern": "^[A-Za-z0-9_-]{1,96}$"
+                        },
+                        "labName": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 200
+                        },
+                        "enabled": {
+                          "type": "boolean"
+                        },
+                        "platformEnabled": {
+                          "type": "boolean"
+                        },
+                        "hasApiKey": {
+                          "type": "boolean"
+                        },
+                        "model": {
+                          "type": "string",
+                          "enum": [
+                            "deepseek-flash",
+                            "deepseek-v4-pro"
+                          ]
+                        },
+                        "version": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 9007199254740991
+                        },
+                        "updatedAt": {
+                          "anyOf": [
+                            {
+                              "type": "string",
+                              "format": "date-time",
+                              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        }
+                      },
+                      "required": [
+                        "labId",
+                        "labName",
+                        "enabled",
+                        "platformEnabled",
+                        "hasApiKey",
+                        "model",
+                        "version",
+                        "updatedAt"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ],
+                  "additionalProperties": false
+                },
+                "example": {
+                  "data": {
+                    "labId": "synthetic",
+                    "labName": "synthetic",
+                    "enabled": false,
+                    "platformEnabled": false,
+                    "hasApiKey": false,
+                    "model": "deepseek-flash",
+                    "version": 0,
+                    "updatedAt": null
                   }
                 }
               }

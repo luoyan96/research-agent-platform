@@ -15,8 +15,8 @@ export const MaintenanceCommand = z.discriminatedUnion('action', [
  z.object({ ...base, action: z.literal('inspect-registration-invite'), inviteId:id }).strict(),
  z.object({ ...base, action: z.literal('designate-manager-invite'), inviteId:id }).strict(),
  z.object({ ...base, action: z.literal('assign-lab-manager'), memberId:id }).strict(),
- z.object({ ...base, action: z.literal('create-account'), memberId: id, username: id, displayName: z.string().min(1).max(200), password: z.string().min(16).max(256) }).strict(),
- z.object({ ...base, action: z.literal('reset-password'), memberId: id, expectedVersion: z.number().int().positive(), password: z.string().min(16).max(256) }).strict(),
+ z.object({ ...base, action: z.literal('create-account'), memberId: id, username: id, displayName: z.string().min(1).max(200), password: z.string().min(9).max(256) }).strict(),
+ z.object({ ...base, action: z.literal('reset-password'), memberId: id, expectedVersion: z.number().int().positive(), password: z.string().min(9).max(256) }).strict(),
  z.object({ ...base, action: z.literal('disable-account'), memberId: id, expectedVersion: z.number().int().positive() }).strict(),
  z.object({ ...base, action: z.literal('inspect-account'), memberId: id }).strict()
 ])

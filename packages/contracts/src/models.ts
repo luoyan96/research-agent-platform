@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-export const contractVersion = '0.8.0' as const
+export const contractVersion = '0.9.1' as const
 export const Id = z.string().regex(/^[A-Za-z0-9_-]{1,96}$/)
 export const Text = z.string().min(1).max(8000)
 export const Title = z.string().min(1).max(200)
@@ -58,6 +58,7 @@ export const Knowledge = z.strictObject({ id: Id, taskId: Id, conclusion: Text, 
 export const Sharing = z.strictObject({ id: Id, taskId: Id, deliverableId: Id, revision: Version, decision: z.enum(['share_selected', 'decline', 'revoke']), selectedText: Text.nullable(), purpose: z.literal('public_capability_improvement'), version: Version })
 export const Health = z.strictObject({ status: z.enum(['ok', 'unavailable']), contractVersion: z.literal(contractVersion), checks: z.strictObject({ database: z.enum(['ok', 'unavailable', 'not_checked']), storage: z.enum(['ok', 'unavailable', 'not_checked']), authentication: z.enum(['ok', 'unavailable', 'not_checked']), harness: z.literal('not_verified') }) })
 export const RegistrationInvite = z.strictObject({ id: Id, labId: Id, expiresAt: Instant, maxUses: z.number().int().min(1).max(50), usedCount: z.number().int().min(0), createdAt: Instant, revokedAt: Instant.nullable(), createdBy: Id.nullable() })
+export const LabAiSettings = z.strictObject({ labId: Id, labName: z.string().min(1).max(200), enabled: z.boolean(), platformEnabled: z.boolean(), hasApiKey: z.boolean(), model: z.enum(['deepseek-flash','deepseek-v4-pro']), version: z.number().int().min(0), updatedAt: Instant.nullable() })
 export const ErrorCode = z.enum(['UNAUTHENTICATED', 'NOT_FOUND', 'FORBIDDEN', 'VALIDATION_ERROR', 'VERSION_CONFLICT', 'IDEMPOTENCY_CONFLICT', 'ALREADY_CLAIMED', 'DEPENDENCY_BLOCKED', 'CAPABILITY_UNAVAILABLE', 'MODEL_UNAVAILABLE', 'CURSOR_EXPIRED', 'SERVICE_UNAVAILABLE', 'NOT_IMPLEMENTED', 'PAYLOAD_TOO_LARGE', 'RATE_LIMITED', 'INVALID_STATE', 'INTERNAL_ERROR', 'INVITE_UNAVAILABLE', 'USERNAME_TAKEN'])
 export const errorStatus = { INVITE_UNAVAILABLE: 400, USERNAME_TAKEN: 409, UNAUTHENTICATED: 401, NOT_FOUND: 404, FORBIDDEN: 403, VALIDATION_ERROR: 400, VERSION_CONFLICT: 409, IDEMPOTENCY_CONFLICT: 409, ALREADY_CLAIMED: 409, DEPENDENCY_BLOCKED: 409, CAPABILITY_UNAVAILABLE: 503, MODEL_UNAVAILABLE: 503, CURSOR_EXPIRED: 410, SERVICE_UNAVAILABLE: 503, NOT_IMPLEMENTED: 501, PAYLOAD_TOO_LARGE: 413, RATE_LIMITED: 429, INVALID_STATE: 409, INTERNAL_ERROR: 500 } as const
 export const ErrorResponse = z.strictObject({ error: z.strictObject({ code: ErrorCode, message: Title, requestId: Id }) })
