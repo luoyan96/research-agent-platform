@@ -107,7 +107,8 @@ function feedback(error: unknown) {
   const err = error instanceof ApiError ? error : new ApiError('ERROR', '操作未完成，请重试。');
   if(err.code==='UNAUTHENTICATED'){controller?.abort();session=undefined;issuedInvite=undefined;api.csrfToken='';members=[];activeSnapshot=undefined;resetPages();shell();login();}
   if(['FORBIDDEN','NOT_FOUND'].includes(err.code)) {controller?.abort();reuse.clear();if(route().startsWith('/tasks/'))coordination.reset(route().slice(7));if(route().startsWith('/plans/'))resetEditor();for(const key of drafts.keys())if(key.startsWith(route()+':'))drafts.delete(key);command.discard();retryCommand=undefined;members=[];activeSnapshot=undefined;resetPages();content('<section class="state-panel"><h1>无法访问此内容</h1><p>资源不存在或当前账号无权访问。旧内容已清除。</p></section>','无法访问');}
-  const target = document.querySelector('#feedback') ?? document.querySelector('main')!;
+  const target = document.querySelector<HTMLElement>('#feedback') ?? document.querySelector<HTMLElement>('main')!;
+  if(route()==='/' && target.id==='feedback') document.querySelector('form[data-form=entry]')?.insertAdjacentElement('afterend',target);
   const conflict = ['VERSION_CONFLICT','IDEMPOTENCY_CONFLICT','ALREADY_CLAIMED','INVALID_STATE'].includes(err.code);
   if(err.code==='CURSOR_EXPIRED') {resetPages();activeSnapshot=undefined;}
   target.innerHTML = `<div class="alert" role="alert"><div><strong>${e(err.code)}</strong><p>${e(err.message)}</p>${recoveryHint(err.code) ? `<p>${e(recoveryHint(err.code))}</p>` : ''}${err.requestId ? `<details><summary>核对请求编号</summary><small>${e(err.requestId)}</small></details>` : ''}${conflict ? '<p>请读取最新状态并比较，再放弃原请求、重新确认；不会自动覆盖新版本。</p>' : ''}</div><div class="actions">${retryCommand ? button('retry-command','重试同一请求') + button('discard-command','放弃原请求') : ''}${button('refresh','读取最新状态')}${err.code === 'UNAUTHENTICATED' ? link('/login','重新登录','button') : ''}</div></div>`;
@@ -115,6 +116,7 @@ function feedback(error: unknown) {
   action('discard-command', () => {command.discard(); retryCommand = undefined; target.innerHTML = '<p role="status">已放弃原请求。请读取最新状态并重新确认；尚未提交的输入仍保留。</p>';});
   if(err.code==='CURSOR_EXPIRED') target.insertAdjacentHTML('afterbegin','<p role="status">数据或权限已变化，旧快照已清除。请读取最新状态重新同步。</p>');
   action('refresh', refresh);
+  if(target.id==='feedback'){target.tabIndex=-1;target.focus({preventScroll:true});target.scrollIntoView({block:'center'});}
 }
 function action(key: string, fn: () => unknown) {
   document.querySelectorAll<HTMLButtonElement>(`[data-action="${key}"]`).forEach(el => el.onclick = () => {if (!busy) Promise.resolve().then(fn).catch(feedback);});
@@ -130,6 +132,8 @@ async function mutate<K extends RouteName>(intent: Intent<K>, success: (value: R
       retryCommand = undefined;
       await success(value);
     } catch (error) {
+      // A disabled planner rejects before creating a job; it is safe to release this intent.
+      if(intent.route==='planRequest' && error instanceof ApiError && error.code==='MODEL_UNAVAILABLE') command.discard();
       if(!command.intent) retryCommand=undefined;
       feedback(error);
     }
